@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!-- 幻燈片=================================================================== -->
+<body>
+
+	<div th:fragment="lightbox" th:switch="${focus}">
+		<!-- ----------管理員：主題圖---------- -->
+		<div class="container-fluid" align="center" th:case="'manager'">
+			<img th:src="@{/images/manger.jpg}" class="mag_pic">
+		</div>
+		<!-- ----------超級管理員：主題圖--------- -->
+		<div class="container-fluid" align="center" th:case="'superManager'">
+			<img th:src="@{/images/boss.jpg}" class="mag_pic">
+		</div>
+		<!-- ----------訪客及會員：幻燈片---------- -->
+		<div class="container-fluid" th:case="*">
+			<div class="row">
+				<div id="carousel-id" class="carousel slide" data-ride="carousel">
+					<!-- 幻燈片小圓點區 -->
+					<ol class="carousel-indicators" th:if="${activities_size} == 0">
+						<li data-target="#carousel-id" data-slide-to="0" class="active"></li>
+					</ol>
+					<ol class="carousel-indicators" th:if="${activities_size} == 1">
+						<li data-target="#carousel-id" data-slide-to="0" class="active"></li>
+					</ol>
+					<ol class="carousel-indicators" th:if="${activities_size} >= 2">
+						<li data-target="#carousel-id" data-slide-to="0" class=""></li>
+						<li data-target="#carousel-id" data-slide-to="1" class="active"></li>
+					</ol>
+					<!-- 幻燈片主圖區 -->
+					<div class="carousel-inner">
+					  <div class="item active" th:if="${activities_size} == 0">
+							<img th:src="@{/images/game2.jpg}" align="right" alt="" class="img_item">
+							<img th:src="@{/images/game2.jpg}" align="right" alt="" class="img_gray">
+							<div class="top-left">
+								<a th:href="@{/activity/search}" class="link_activity">
+									<br>
+									<label>歡迎來到</label><br>
+									<label>基分撲蝶會活動網站</label><br>
+									<br>
+								</a>
+							</div>
+							<div class="top-right"></div>
+						</div>
+					   <div class="item active" th:if="${activities_size} == 1">
+							<img th:src="@{(${activities_show[0].avtImg})}" align="right" alt="" class="img_item">
+							<img th:src="@{(${activities_show[0].avtImg})}" align="right" alt="" class="img_gray">
+							<div class="top-left">
+								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
+									class="link_activity">
+									<label th:text="${activities_show[0].avtName}"></label><br>
+									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,19)}"></label><br>
+									<label th:text="${activities_show[0].avtLoc}"></label><br>
+								</a>
+							</div>
+							<div class="top-right"></div>
+						</div>
+						<div class="item" th:if="${activities_size} >= 2">
+							<img th:src="@{(${activities_show[0].avtImg})}" align="right" alt="" class="img_item">
+							<img th:src="@{(${activities_show[0].avtImg})}" align="right" alt="" class="img_gray">
+							<div class="top-left">
+								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
+									class="link_activity">
+									<label th:text="${activities_show[0].avtName}"></label><br>
+									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,19)}"></label><br>
+									<label th:text="${activities_show[0].avtLoc}"></label><br>
+								</a>
+							</div>
+							<div class="top-right"></div>
+						</div>
+						<div class="item active" th:if="${activities_size} >= 2">
+							<img th:src="@{(${activities_show[1].avtImg})}" align="right" alt="" class="img_gray"> 
+							<img th:src="@{(${activities_show[1].avtImg})}" align="right" alt="" class="img_item">
+							<div class="top-left"></div>
+							<div class="top-right">
+								<a th:href="@{/activity/search/detail(activityId=${activities_show[1].avtNo})}" class="link_activity">
+									<label th:text="${activities_show[1].avtName}"></label><br>
+									<label th:text="${#strings.substring(activities_show[1].avtGatDate,0,19)}"></label><br>
+									<label th:text="${activities_show[1].avtLoc}"></label><br>
+								</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- 換頁控制區 -->
+					<a class="left carousel-control" href="#carousel-id"
+						data-slide="prev"><span
+						class="glyphicon glyphicon-chevron-left"></span>
+					</a> 
+					<a
+						class="right carousel-control" href="#carousel-id"
+						data-slide="next"><span
+						class="glyphicon glyphicon-chevron-right"></span>
+					</a>
+				</div>
+			</div>
+	  </div>
+	</div>
+
+</body>
+</html>

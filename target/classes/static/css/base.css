@@ -1,0 +1,296 @@
+/*--------------------導覽列--------------------*/
+header {
+	height: 20px;
+}
+
+header ul {
+	margin: 0;
+}
+
+header a, header li {
+	color: #777;
+	font-weight: bold
+}
+
+#imgTop {
+	margin-right: 10px;
+	padding-left: 0;
+}
+
+#navbar-title {
+	color: white;
+	font-family: Microsoft JhengHei;
+}
+
+.navbar-default {
+	background-color: #5555FF;
+	border-color: #5555FF;
+	border-radius: 0;
+}
+
+.navbar-default .navbar-nav>li>a {
+	color: #ecf0f1;
+}
+
+.navbar-default .navbar-nav>li>a:hover, .navbar-default .navbar-nav>li>a:focus .nav_title
+	{
+	color: white;
+	background-color: #0000AA;
+}
+
+.navbar-default .navbar-nav>.open>a, .navbar-default .navbar-nav>.open>a:focus,
+	.navbar-default .navbar-nav>.open>a:hover {
+	background-color: #0000AA;
+	border-color: #0000AA;
+	color: white;
+}
+
+/*--------------------幻燈片區--------------------*/
+.item {
+	position: relative;
+	text-align: center;
+}
+
+.link_activity {
+	color: white;
+	text-decoration: none;
+}
+
+.link_activity:hover {
+	color: white;
+	text-decoration: none;
+}
+
+.top-left {
+	position: absolute;
+	top: 120px;
+	left: 9%;
+	font-size: 300%;
+	font-weight: bold;
+	color: white;
+	font: 30px;
+	/* -webkit-text-stroke: 5px #fff;
+    -webkit-text-fill-color: transparent;*/
+	text-shadow: -.065em -.065em 0 #444, .065em -.065em 0 #444, -.065em
+		.065em 0 #444, .065em .065em 0 #444;
+}
+
+.top-right {
+	position: absolute;
+	top: 120px;
+	right: 9%;
+	font-size: 300%;
+	font-weight: bold;
+	color: white;
+	/* -webkit-text-stroke: 5px #fff;
+    -webkit-text-fill-color: transparent;*/
+	text-shadow: -.065em -.065em 0 #444, .065em -.065em 0 #444, -.065em
+		.065em 0 #444, .065em .065em 0 #444;
+}
+
+.top-left:hover {
+	font-size: 320%;
+}
+
+.top-right:hover {
+	font-size: 320%;
+}
+
+.img_item {
+	width: 50%;
+}
+
+.img_gray {
+	width: 50%;
+	-webkit-filter: grayscale(1); /* Webkit */
+	filter: gray; /* IE6-9 */
+	filter: grayscale(1); /* W3C */
+}
+
+/*若為管理為圖片*/
+.mag_pic {
+	width: 70%;
+}
+/*--------------------內容區--------------------*/
+.content {
+	padding-top: 10px;
+	padding-bottom: 40px;
+	padding-right: 40px;
+	padding-left: 40px;
+}
+
+@media ( min-width : 768px) {
+	.container {
+		width: auto;
+	}
+}
+/*--------------------功能及麵包屑--------------------*/
+/*功能*/
+ul .show {
+	width: 100%;
+	background-color: #CCEEFF;
+	color: black;
+	border: solid 0.5px #DDDDDD;
+}
+
+.nav-pills>li>a {
+	border-radius: 0px;
+	width: 150px;
+	text-align: center;
+}
+
+.show_list ul li {
+	float: left;
+}
+
+/*麵包屑*/
+.breadcrumb>li+li:before {
+	color: #CCCCCC;
+	content: "/ ";
+	padding: 0 5px;
+}
+
+/*--------------------複合式查詢活動--------------------*/
+#keyWord {
+	width: 250px;
+	height: 35px;
+	border-radius: 5px;
+}
+
+/*--------------------底部平台介紹--------------------*/
+footer {
+	background-color: black;
+	color: white;
+	margin-top: 3em;
+}
+
+footer h5, footer .img-responsive {
+	margin-top: 4em;
+	font-weight: bold;
+	color: lightblue;
+}
+
+footer a {
+	font-weight: 300;
+	color: white;
+}
+
+footer a : hover {
+	text-decoration: none;
+	color: #FFF;
+}
+
+.footer_introduce{
+	font-size:16px;
+	word-wrap:break-word;
+	white-space: pre-wrap;
+	border:none;
+	color:white;
+	background-color:black;
+}
+
+.qrCode {
+	margin-bottom: 2em;
+	width:50%;
+}
+
+@media only screen and (max-width: 600px) {
+	.qrCode {
+	margin-bottom: 2em;
+	width:100%;
+}
+}
+/*--------------------錯誤訊息視窗--------------------*/
+#message_dialog {
+	width: 30%
+}
+
+@media only screen and (max-width: 600px) {
+	#message_dialog {
+		width: 95%
+	}
+}
+
+#message_dialog_logout {
+	width: 20%
+}
+
+@media only screen and (max-width: 600px) {
+	#message_dialog_logout {
+		width: 95%
+	}
+}
+
+.theTime {
+color:grey;
+}
+/*--------------------不同螢幕尺寸--------------------*/
+
+/*小螢幕(ex:iphone)*/
+@media only screen and (max-width: 600px) {
+	.img_gray {
+		width: 0px;
+	}
+	.img_item {
+		width: 100%;
+	}
+	.top-right {
+		top: 70px;
+		right: 25%;
+		font-size: 150%;
+	}
+	.top-left {
+		top: 70px;
+		left: 25%;
+		font-size: 150%;
+	}
+	.top-left:hover {
+		font-size: 170%;
+	}
+	.top-right:hover {
+		font-size: 170%;
+	}
+	.breadcrumb {
+		margin-top: 5px;
+	}
+	.nav-pills>li>.show {
+		width: 100%;
+	}
+	.show_list ul li {
+		float: none;
+	}
+	ul .show {
+		margin-top: 2px;
+	}
+	.search label {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.mag_pic {
+		width: 100%;
+		margin-top: 10px;
+		src: '../images/3d_little_man/write.jpg';
+	}
+	.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+		color: lightblue;
+	}
+}
+/*中螢幕(ex:ipad)*/
+@media only screen and (max-width: 768px) and (min-width: 601px) {
+	.top-right {
+		top: 70px;
+		right: 15%;
+		font-size: 150%;
+	}
+	.top-left {
+		top: 70px;
+		left: 15%;
+		font-size: 150%;
+	}
+	.top-left:hover {
+		font-size: 165%;
+	}
+	.top-right:hover {
+		font-size: 165%;
+	}
+}

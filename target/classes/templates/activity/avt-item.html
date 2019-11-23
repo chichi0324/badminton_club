@@ -1,0 +1,387 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<title>基分撲蝶會活動網站</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+	<link rel="stylesheet" th:href="@{/css/base.css}">
+	<link rel="stylesheet" th:href="@{/css/avt_item.css}">
+
+	<script th:src="@{/js/avt-item.js}"></script>
+	<script async defer crossorigin="anonymous"
+		src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+	<!-- 幻燈片=================================================================== -->
+	<div th:replace="lightbox::lightbox"></div>
+	<!--內容區===================================================================-->
+	<div class="container content">
+		<!--錯誤訊息，及提醒視窗================================================================-->
+		<div th:replace="show_message::show_message"></div>
+
+		<!--功能及麵包屑==========================================-->
+		<div th:replace="breadcrumb::breadcrumb"></div>
+
+		<div class="row">
+			<div class="col-md-12 col-sm-12">
+				<div class="avt_title">
+					<h2>
+						<b th:text="${theActivity.avtName}"></b>
+					</h2>
+					<h5 class="avt_type" th:text="'活動類型 : '+${theActivity.activityType.avtTypeName}"></h5>
+				</div>
+			</div>
+		</div>
+
+		<div class="avt_detail">
+			<div class="row">
+				<div class="col-md-6 col-sm-12">
+					<img th:src="@{(${theActivity.avtImg})}" class="avt_item_img">
+				</div>
+				<div class="col-md-6 col-sm-12">
+					<br>
+					<p th:if="${theActivity.avtDateS == theActivity.avtDateE}"
+						th:text="' 活動日期 : '+${theActivity.avtDateS}"></p>
+					<p th:if="${theActivity.avtDateS != theActivity.avtDateE}"
+						th:text="' 活動日期 : '+${theActivity.avtDateS+ '~' +theActivity.avtDateE}"></p>
+					<p th:text="' 集合時間 : '+${#strings.substring(theActivity.avtGatDate,0,19)}"></p>
+					<p th:text="' 集合地點 : '+${theActivity.avtLoc}"></p>
+					<p th:text="' 活動費用 : '+${theActivity.avtPrice}"></p>
+					<p th:text="' 活動截止 : '+${theActivity.avtCutDate}"></p>
+					<p th:text="' 名額(上限/下限) : '+${theActivity.avtUpp}+' / '+${theActivity.avtLow}"></p>
+					<p th:text="' 活動主辦人 : '+${theActivity.member.memName}"></p>
+					<p th:text="' 活動主辦人聯絡電話 : '+${theActivity.member.memPhone}"></p>
+					
+					<p th:if="${focus == 'manager' && theActivity.avtOnly == 0}">&nbsp;<label>✔&nbsp;可攜帶親友參加</label></p>
+					<p th:if="${focus == 'manager' && theActivity.avtFrdData == 1}">&nbsp;<label>✔&nbsp;需要親友資料</label></p>
+
+					<p align="right">
+					   <div class="text-right more" th:switch="${theActivity.avtStat}">						   
+						   <input th:case="已結束"  type="button" value="已結束" class="btn btn-info btn-lg" disabled="disabled">
+						   <input th:case="已額滿"  type="button" value="已額滿" class="btn btn-info btn-lg" disabled="disabled">
+						   <input th:case="已截止"  type="button" value="已截止" class="btn btn-info btn-lg" disabled="disabled">
+						   <a th:case="報名中" th:href="@{/activity/search/detail/apply(activityId=${theActivity.avtNo})}" th:if="${focus == 'activity'}"
+							class="btn btn-danger btn-lg" role="button" id="signUp">我要報名</a>
+						   <input type="button" value="報名成功" class="btn btn-warning btn-lg" disabled="disabled" th:if="${focus == 'member'}">		   
+					   </div>
+					</p>
+					
+				</div>
+			</div>
+		</div>
+
+		<div class="avt_detail">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>介紹:</h3>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<pre th:text="${theActivity.avtIntr}" class="avt_introduce"></pre>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>備註:</h3>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<pre th:text="${theActivity.avtMemo}" class="avt_introduce"></pre>
+				</div>
+			</div>
+		</div>
+
+		<div class="avt_detail" th:if="${advocateSize > 0}">
+			<div class="row">
+				<div class="col-md-2 col-xs-2">
+					<h3>活動宣傳:</h3>
+					<br> <img th:src="@{/images/horn.jpg}" alt=""
+						width="100%">
+				</div>
+				<div class="col-md-8 col-xs-10">
+					<div class="mySlides" th:each="advocate,adoStat: ${theActivity.advocates}">
+						<div class="numbertext" th:text="${adoStat.index+1 +' / '+adoStat.size}"></div>
+						<img th:src="@{(${advocate.advImg})}" style="width: 97%">
+					</div>
+					<a class="prev" onclick="plusSlides(-1)">❮</a> <a class="next"
+						onclick="plusSlides(1)">❯</a> <br>
+				</div>
+				<div class="col-md-2 col-xs-12">
+					<div class="ad">
+						<div class="column" th:each="advocate,adoStat: ${theActivity.advocates}">
+							<img class="demo cursor"
+								th:src="@{(${advocate.advImg})}"
+								style="width: 100%" th:onclick="currentSlide([[${adoStat.index+1}]])">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="avt_detail" th:if="${focus == 'member'}">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>報名資料:</h3>
+				</div>
+			</div>
+			<br>
+			<div class="row" th:each="data,d: ${joinDatas}">
+			    <div class="col-md-12 col-sm-12" th:if="${d.index > 0}">
+			        <h4 th:text="' 親友'+${d.index}" style="color:blue"></h4>
+			    </div>
+			    
+			    <div class="col-md-4 col-sm-12"><p th:text="' 姓名 : '+${data.signName}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' 性別 : '+${data.signGen=='M' ? '男' : '女'}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' 生日 : '+${data.signBirth}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' 身分證 : '+${data.signIdn}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' 手機號碼 : '+${data.signPhone}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' Email : '+${data.signMail}"></p></div>
+			    <div class="col-md-4 col-sm-12"><p th:text="' 地址 : '+${data.signAddr}"></p></div>
+			    
+			    <div class="col-md-4 col-sm-12" th:each="other: ${data.otherDataAns}">
+			        <p th:text="' '+${other.otherData.othName}+' : '+${other.otheaCon}"></p>	
+			    </div>
+			    
+			    <div class="col-md-4 col-sm-12" th:if="${d.index == 0}">
+			        <p th:text="' 人數 : '+${data.signCount}" style="color:#CC6600"></p>
+			    </div>
+			</div>
+		</div>
+		
+		<div class="avt_detail" th:if="${focus == 'manager' && otherDatas !=null}">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>需要其他會員資料:</h3>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+			    <div class="col-md-12 col-sm-12">
+			        <p th:text="${otherDatas}"></p>
+			    </div>
+			</div>
+		</div>
+		
+		<div class="avt_detail" th:if="${focus == 'manager'}">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>報名人員清單:&nbsp;&nbsp;
+					     <form method="post" th:action="@{/manager/activityManagement/search/detail/signAvtData}" style="display:inline;">
+					       <input type="hidden" name="activityId" th:value="${theActivity.avtNo}" />
+					       <input type="hidden" name="check" th:value="${check}" />
+					       <button type="submit" class=" btn btn-info" data-dismiss="modal">人員清冊</button>
+					     </form>
+					</h3>
+				</div>
+			</div>
+		</div>
+		
+		<div class="avt_detail" th:if="${focus == 'manager'}">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>已審核通過管理員:</h3>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+			    <div class="col-md-12 col-sm-12">
+			        <p th:text="${passedManager}"></p>
+			    </div>
+			</div>
+		</div>
+
+		<div class="avt_detail" th:if="${theActivity.avtStat} == '已結束'">
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<h3>回饋心得:</h3>
+					<br>
+				</div>
+				<div class="row message_member" th:if="${focus == 'activity' || focus == 'member'}">
+					<div class="col-md-1 col-sm-4" th:if="${theMember.memImg}">
+						<img th:src="@{(${theMember.memImg})}" class="face_message">
+					</div>
+					<div class="col-md-1 col-sm-4" th:if="not${theMember.memImg}"  th:switch="${theMember.memGen}">
+						<img th:case="W" th:src="@{/images/face2.jpeg}" class="face_message">
+						<img th:case="M" th:src="@{/images/face3.jpeg}" class="face_message">
+					</div>
+					<form class="form-horizontal" th:action="@{/activity/search/detail/saveMessage}" method="post" th:object="${theMessage}">
+					<div class="col-md-11 col-sm-8">
+						<div class="col-md-12 col-sm-12" style="display: inline-block;">
+							<div class="starts">
+								<div id="pingStar" th:if="${theMessage.starCount ==0 }">
+									<label id="1">☆</label> 
+									<label id="2">☆</label> 
+									<label id="3">☆</label>
+									<label id="4">☆</label> 
+									<label id="5">☆</label> <span id="dir"></span>
+								</div>
+								<div id="pingStar" th:if="${theMessage.starCount ==1 }">
+									<label id="1">★</label> 
+									<label id="2">☆</label> 
+									<label id="3">☆</label>
+									<label id="4">☆</label> 
+									<label id="5">☆</label> <span id="dir"></span>
+								</div>
+								<div id="pingStar" th:if="${theMessage.starCount ==2 }">
+									<label id="1">★</label> 
+									<label id="2">★</label> 
+									<label id="3">☆</label>
+									<label id="4">☆</label> 
+									<label id="5">☆</label> <span id="dir"></span>
+								</div>
+								<div id="pingStar" th:if="${theMessage.starCount ==3 }">
+									<label id="1">★</label> 
+									<label id="2">★</label> 
+									<label id="3">★</label>
+									<label id="4">☆</label> 
+									<label id="5">☆</label> <span id="dir"></span>
+								</div>
+								<div id="pingStar" th:if="${theMessage.starCount ==4 }">
+									<label id="1">★</label> 
+									<label id="2">★</label> 
+									<label id="3">★</label>
+									<label id="4">★</label> 
+									<label id="5">☆</label> <span id="dir"></span>
+								</div>
+								<div id="pingStar" th:if="${theMessage.starCount ==5 }">
+									<label id="1">★</label> 
+									<label id="2">★</label> 
+									<label id="3">★</label>
+									<label id="4">★</label> 
+									<label id="5">★</label> <span id="dir"></span>
+								</div>
+								<input type="hidden" name="star_count" th:field="*{starCount}" id="startP">
+							</div>
+						</div>
+						<div class="col-md-12 col-sm-12">						   
+							<div>
+								<textarea class="form-control" name="message" placeholder="想說的話..." rows="5" 
+								style="word-wrap: break-word;word-break: break-all;" th:field="*{message}"></textarea>
+								<br>
+								<input type="hidden" th:field="*{avtNo}" />
+							</div>
+							<div class="text-right">
+							    <button type="submit" class="btn btn-warning" >送出</button>								
+								<br>
+							</div>							
+						</div>
+					</div>
+					</form>
+				</div>
+				<!-- ---------------------回饋心得區---------------------- -->
+				<div th:each="message: ${theActivity.avtMessages}">
+				<div class="row message_member">
+					<div class="col-md-1 col-sm-4" th:if="${message.member.memImg}">
+					    <img th:src="@{(${message.member.memImg})}" class="face_message">
+					</div>
+					<div class="col-md-1 col-sm-4" th:if="not${message.member.memImg}"  th:switch="${message.member.memGen}">
+						<img th:case="W" th:src="@{/images/face2.jpeg}" class="face_message">
+						<img th:case="M" th:src="@{/images/face3.jpeg}" class="face_message">
+					</div>
+					<div class="col-md-11 col-sm-8 border-bottom">
+						<div class="col-md-12 col-sm-12" style="display: inline-block;" th:switch="${message.msgStar}">
+							<h4 th:text="${message.member.memName+' '+message.member.memUser}"></h4>
+							<label th:case="1" style="color: orange;">★</label>
+							<label th:case="2" style="color: orange;">★★</label>
+							<label th:case="3" style="color: orange;">★★★</label>
+							<label th:case="4" style="color: orange;">★★★★</label>
+							<label th:case="5" style="color: orange;">★★★★★</label>
+							<label th:case="*" style="color: orange;"></label>
+						</div>
+						
+						<div class="col-md-12 col-sm-12">
+							<div class="avt_message">
+							   <pre th:text="${message.msgCon}" class="avt_message_pre"></pre>
+							</div>
+							<form class="form-horizontal" th:action="@{/activity/search/detail/deleteMessage}" method="post" >
+							<div align="right">
+							    <span class="message_time" th:text="${#strings.substring(message.msgTime,0,19)}"></span>&nbsp; 							    
+							       <input type="hidden" name="avt_no" th:value="${theActivity.avtNo}" />
+							       <input type="hidden" name="msg_no" th:value="${message.msgNo}" />
+								   <button type="submit" class="btn btn-danger btn-xs" 
+								   th:if="${theMember!=null && message.member.memUser==theMember.memUser}" 
+								   sec:authorize="!hasRole('SURPERMANAGER')" 
+								   onclick="if (!(confirm('您確認要刪除這筆留言?'))) return false">刪除</button>		
+								   <button type="submit" class="btn btn-danger btn-xs" sec:authorize="hasRole('SURPERMANAGER')" 
+								   onclick="if (!(confirm('您確認要刪除這筆留言?'))) return false">刪除</button>								
+							</div>
+						   </form>
+						</div>
+						
+					</div>
+				</div>			
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<p align="center">
+			<br> 
+			<a th:href="@{/activity/search}" class="btn btn-primary " role="button" th:if="${focus == 'activity'}">回到活動列表</a>
+			<a th:href="@{/member/activity}" class="btn btn-primary " role="button" th:if="${focus == 'member'}">回到我的活動</a>
+		</p>
+	</div>
+
+
+	</div>
+
+
+
+	<!--底部平台介紹================================================================-->
+	<div th:replace="footer::footer"></div>
+
+
+    <script th:src="@{/js/avt_item.js}"></script>
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+     <script type="text/javascript">
+		// ---------------------活動宣傳圖片集-------------------
+		var slideIndex = 1;
+		showSlides(slideIndex);
+
+		function plusSlides(n) {
+			showSlides(slideIndex += n);
+		}
+
+		function currentSlide(n) {
+			showSlides(slideIndex = n);
+		}
+
+		function showSlides(n) {
+			var i;
+			var slides = document.getElementsByClassName("mySlides");
+			var dots = document.getElementsByClassName("demo");
+			var captionText = document.getElementById("caption");
+			if (n > slides.length) {
+				slideIndex = 1
+			}
+			if (n < 1) {
+				slideIndex = slides.length
+			}
+			for (i = 0; i < slides.length; i++) {
+				slides[i].style.display = "none";
+			}
+			for (i = 0; i < dots.length; i++) {
+				dots[i].className = dots[i].className.replace(" active", "");
+			}
+			slides[slideIndex - 1].style.display = "block";
+			dots[slideIndex - 1].className += " active";
+			captionText.innerHTML = dots[slideIndex - 1].alt;
+		}
+
+	</script>
+</body>
+
+</html>

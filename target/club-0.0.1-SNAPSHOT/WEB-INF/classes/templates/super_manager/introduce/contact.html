@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>基分撲蝶會活動網站</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="short Icon" type="images/x-icon"
+	th:href="@{/images/ball.png}">
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/super_manager.css}">
+
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+	src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+
+	<!--主題圖片===================================================================-->
+	<div th:replace="lightbox::lightbox"></div>
+
+	<!--內容區===================================================================-->
+	<div class="container content">
+		<!--錯誤訊息，及提醒視窗================================================================-->
+		<div th:replace="show_message::show_message"></div>
+		<!--功能及麵包屑==========================================-->
+		<div th:replace="fuctionList::fuctionList"></div>
+		<div th:replace="breadcrumb::breadcrumb"></div>
+
+		<form class="form-horizontal"
+			th:action="@{/superManager/clubEdit/connect/save}" method="post"
+			th:object="${theSystem}">
+
+			<input type="hidden" th:field="*{sysNo}" /> 
+			<input type="hidden" th:field="*{sysName}" />
+
+			<div class="row">
+				<div class="col-md-12 col-sm-12">
+					<div class="function">
+						<h2>聯絡資訊</h2>
+						<textarea class="form-control" rows="5" cols="80" th:field="*{sysCon}"></textarea>
+						<div class="row">
+							<div style="margin-top: 12px; text-align: left;">
+								&nbsp;&nbsp;
+								<button type="submit" class="btn btn-info">存檔</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+
+	</div>
+
+
+
+	<!--底部平台介紹================================================================-->
+	<div th:replace="footer::footer"></div>
+
+
+    <script th:src="@{/js/show_message.js}"></script>
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

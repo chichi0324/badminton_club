@@ -1,0 +1,142 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>基分撲蝶會活動網站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/manger_activity_signAvt.css}">
+
+  <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+	
+	<!--主題圖片===================================================================-->
+	<div th:replace="lightbox::lightbox"></div>
+
+  <!--內容區===================================================================-->
+  <div class="container content">
+    <!--功能及麵包屑==========================================-->
+    <div th:replace="breadcrumb::breadcrumb"></div>
+    <!--錯誤訊息，及提醒視窗================================================================-->
+    <div th:replace="show_message::show_message"></div>
+        <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <div class="avt_title">
+          <h2><b th:text="${queryDTO.addOrEdit}"></b></h2>
+          <h5 class="avt_type" th:text="'活動名稱 : '+${queryDTO.activity.avtName}"></h5>
+        </div>
+      </div>
+    </div>
+    <!--新增或修改==========================================-->
+    <div class="avt_detail">
+    <form th:action="@{/manager/activityManagement/search/detail/signAvtData/save}" method="post" class="form-horizontal bg-img" th:object="${queryDTO}">
+    
+    <input type="hidden" th:field="*{activity.avtNo}" />
+    <input type="hidden" th:field="*{check}" />
+    <input type="hidden" th:field="*{signupAvt.signNo}" />
+    <input type="hidden" th:field="*{addOrEdit}" />
+    <input type="hidden" th:field="*{keyWord}" />
+    
+      <div class="row">
+        <div class="col-md-6 col-sm-12">
+           <div class="other_man">
+                      <span th:if="${queryDTO.addOrEdit =='新增人員'}">
+                         <span th:if="${queryDTO.activity.avtFrdData==0}"><font color='red'>*</font>會員帳號:</span>
+                         <h5 style="color: grey;" th:if="${queryDTO.activity.avtFrdData==1}">&nbsp;&nbsp;填寫會員帳號，非會員略過此項</h5>
+                         <input type="text" th:field="*{member.memUser}" class="form-control add_join_mem"  size="8"/>
+                         &nbsp;<a th:href="@{/manager/activityManagement/search/detail/signAvtData/add/member(check=${queryDTO.check},avtNo=${queryDTO.activity.avtNo})}" class="btn btn-default" role="button">帶入會員資料</a><br><br>
+                      </span>
+                      <font color='red'>*</font>姓名:
+                      <input type="text" th:field="*{signupAvt.signName}" class="form-control add_join_mem"  size="8"  required/><br><br>
+                      <font color='red'>*</font>性別:
+                      <input type="radio" value="M" th:field="*{signupAvt.signGen}" required>男性&nbsp;&nbsp;
+                      <input type="radio" value="W" th:field="*{signupAvt.signGen}">女性&nbsp;<br><br>
+                      <font color='red'>*</font>生日：
+                      <input type="date" class="form-control add_join_mem" th:field="*{birthDate}" required /><br><br>
+                      <font color='red'>*</font>身分證:
+                      <input type="text" class="form-control add_join_mem" max="10" size="15" th:field="*{signupAvt.signIdn}" required /><br><br>
+                      <font color='red'>*</font>手機號碼:
+                      <input type="text" class="form-control add_join_mem" max="10" size="15" th:field="*{signupAvt.signPhone}" required /><br><br>
+                      <font color='red'>*</font>Email:
+                      <input type="email" name="email" class="form-control add_join_mem" th:field="*{signupAvt.signMail}" required /><br><br>
+                      <font color='red'>*</font>地址:<input type="text" class="form-control add_join_mem"
+                        size="40"  th:field="*{signupAvt.signAddr}" required/><br>
+                      <span th:if="${queryDTO.activity.avtOnly==0 && queryDTO.activity.avtFrdData==0}">
+                         <font color='red'>*</font>參與人數(含自己):
+                         <input type="number" th:field="*{count}" min="1" class="form-control add_join_mem" required/><br><br>                      
+                      </span>
+                      <span th:each="oth,o: *{otherDatas}">
+                         <p th:text="'*'+${oth.name}+':'"></p>
+                         <input type="text" class="form-control "  th:field="*{otherDatas[__${o.index}__].data}" required/>
+                         <input type="hidden" th:field="*{otherDatas[__${o.index}__].no}" />
+                         <input type="hidden" th:field="*{otherDatas[__${o.index}__].name}" />
+                         <br>
+                      </span>
+                      <span th:if="${queryDTO.addOrEdit =='修改資料' && queryDTO.activity.avtFrdData==1}">
+                          會員親友:(會員帳號)
+                          <input type="text" class="form-control add_join_mem"
+                          size="40"  th:field="*{signupAvt.member.memUser}" readOnly/>
+                      </span>
+                      <span th:if="${queryDTO.addOrEdit =='新增人員' && queryDTO.activity.avtFrdData==1}">
+                         <font color='red'>*</font>會員親友:(會員帳號)<input type="text" class="form-control add_join_mem"
+                          size="40"  th:field="*{signupAvt.member.memUser}" required/>
+                      </span>
+                      
+                      <br><br>
+                      <button type="submit" class="btn btn-info">存檔</button>
+                      <input type="button" name="" onclick="test()" value="假資料">
+                      <br>
+            </div>
+        </div>
+      </div>
+</form>
+  </div>
+</div>
+
+
+  <!--底部平台介紹================================================================-->
+<div th:replace="footer::footer"></div>
+
+
+  <script th:src="@{/js/show_message.js}"></script>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script th:src="@{/js/checkbox.js}"></script>
+  <script>
+  function test() {
+		/* 第一位 */
+		document.getElementById("signupAvt.signName").value = "劉娟娟";	
+		document.getElementById("signupAvt.signGen2").checked = true;
+		document.getElementById("birthDate").value = "1991-06-10";	
+		document.getElementById("signupAvt.signIdn").value = "D656882390";	
+		document.getElementById("signupAvt.signPhone").value = "0998366748";	
+		document.getElementById("signupAvt.signMail").value = "yhi889@gmail.com";	
+		document.getElementById("signupAvt.signAddr").value = "桃園市龍潭區金龍路310號";	
+		document.getElementById("otherDatas0.data").value = "葷";	
+		document.getElementById("otherDatas1.data").value = "劉大傑";	
+		document.getElementById("otherDatas2.data").value = "0955779908";	
+		document.getElementById("signupAvt.member.memUser").value = "edward";
+		}
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+	<title>基分撲蝶會活動網站</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+	<link rel="stylesheet" th:href="@{/css/base.css}">
+	<link rel="stylesheet" th:href="@{/css/avt.css}">
+
+	<script async defer crossorigin="anonymous"
+		src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+
+	<!--主題圖片===================================================================-->
+	<div class="container-fluid" align="center">
+		<img th:src="@{/images/stop.png}" width="45%">
+	</div>
+
+	<!-- 內容區=================================================================== -->
+	<div class="container content">
+		<br>
+		<div class="row">
+			<div class="col-md-12 col-sm-12 " align="center">
+				<label style="color:red;font-style:italic;">
+					<h2>您無權限使用此功能</h2>
+				</label>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- 底部平台介紹================================================================ -->
+
+	<div th:replace="footer::footer"></div>
+
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>

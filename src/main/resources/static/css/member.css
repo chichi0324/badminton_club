@@ -1,0 +1,118 @@
+/*----------------mem.html------------------------*/
+.member_data{
+  padding-left: 17%;
+  padding-right: 30%;
+}
+
+#face_img{
+	width:50%;
+}
+/*小螢幕(ex:iphone)*/
+@media only screen and (max-width: 600px){
+  .member_data{
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+  #face_img{
+	width:100%;
+  }
+}
+
+/*中螢幕(ex:ipad)*/
+@media only screen and (max-width: 768px) and (min-width: 601px){
+  .member_data{
+    padding-left: 15%;
+    padding-right: 15%;
+  }
+}
+
+/* 帳號密碼提醒間距 */
+.prompt{
+	padding-left:8%;
+	padding-right:8%
+}
+/*大螢幕(ex:ipad)*/
+@media only screen  and (min-width: 1501px){
+  
+  .prompt{
+	padding-left:11%;
+	padding-right:11%
+   }
+}
+
+
+/*-----------------mem_avt.html-----------------------*/
+
+.avt_img{
+  width: 100%;
+}
+.member_activities{
+  padding: 10px;
+  padding: 10px;
+/*   border-style:dotted;
+  border-width:1px; 
+  border-color:#939699; */
+}
+.search{
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.theTime {
+color:grey;
+}
+
+.avt_name {
+color: black;
+font-weight:bold;
+}
+
+/*小螢幕(ex:iphone)*/
+@media only screen and (max-width: 600px){
+  .avt_img{
+    width: 100%;
+  }
+  .avt_con{
+    padding-left: 10%;
+    padding-right: 10%;
+  }
+}
+
+/* ------------------table響應式----------------- */
+
+/*額外做顏色，沒有什麼意義*/
+tr.tr-only-hide {
+  color:#804000;
+}
+
+@media (max-width: 736px) {
+.table-rwd{min-width: 100%;}
+/*針對tr去做隱藏*/
+tr.tr-only-hide {display: none !important;}
+/*讓tr變成區塊主要讓他有個區塊*/
+.table-rwd tr{
+  display: block;
+  border: 1px solid #ddd;
+  margin-top: 5px;
+}
+.table-rwd td {
+  text-align: left;
+  font-size: 15px;
+  overflow: hidden;
+  width: 100%;
+  display: block;
+}
+.table-rwd td:before {
+  /*最重要的就是這串*/
+  content: attr(data-th) " : ";
+  /*最重要的就是這串*/
+  display: inline-block;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-right: 10px;
+  color: #804000;
+}
+/*當RWD縮小的時候.table-bordered 會有兩條線，所以針對.table-bordered去做修正*/
+.table-rwd.table-bordered td,.table-rwd.table-bordered th,.table-rwd.table-bordered{border:0;}
+
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<!--導覽列==========================================================================-->
+<body>
+
+	<div th:fragment="nav-header">
+		<header>
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+							<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+						</button>
+						<a th:href="@{/activity/search}" class="navbar-brand" href="#" id="navbar-title"><img
+								th:src="@{/images/ball.png}" width="30px" id="imgTop"
+								class="pull-left"><b>基分撲蝶會活動網站</b></a>
+					</div>
+					<div class="collapse navbar-collapse" id="myNavbar">
+						<ul class="nav navbar-nav">
+							<li class="dropdown" th:switch="${focus}">
+								<a th:case="'activity'" class="dropdown-toggle nav_title" data-toggle="dropdown"
+									style="background-color: #0000AA; border-color: #0000AA; color: white;">活動專區
+									<span class="caret"></span>
+								</a>
+								<a th:case="*" class="dropdown-toggle nav_title" data-toggle="dropdown">活動專區
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a th:href="@{/activity/search}">活動總覽</a></li>
+								</ul>
+							</li>
+							<li class="dropdown" th:switch="${focus}">
+								<a th:case="'member'" class="dropdown-toggle nav_title"
+									style="background-color: #0000AA; border-color: #0000AA; color: white;"
+									data-toggle="dropdown">社員專區 <span class="caret"></span>
+								</a>
+								<a th:case="*" class="dropdown-toggle nav_title" data-toggle="dropdown">社員專區 <span
+										class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a th:href="@{/member/modify}">社員資料修改</a></li>
+									<li><a th:href="@{/member/activity}">我的活動</a></li>
+								</ul>
+							</li>
+							<li class="dropdown" th:switch="${focus}" sec:authorize="hasRole('MANAGER')">
+								<a th:case="'manager'" class="dropdown-toggle nav_title"
+									style="background-color: #0000AA; border-color: #0000AA; color: white;"
+									data-toggle="dropdown">活動管理 <span class="caret"></span>
+								</a>
+								<a th:case="*" class="dropdown-toggle nav_title" data-toggle="dropdown">活動管理 <span
+										class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a th:href="@{/manager/activityManagement}">我的活動管理</a></li>
+									<li><a th:href="@{/manager/activityReview}">活動審核</a></li>
+									<li><a th:href="@{/manager/memberManagement}">社員管理</a></li>
+								</ul>
+							</li>
+
+							<li class="dropdown" th:switch="${focus}" sec:authorize="hasRole('SURPERMANAGER')">
+								<a th:case="'superManager'" class="dropdown-toggle nav_title"
+									style="background-color: #0000AA; border-color: #0000AA; color: white;"
+									data-toggle="dropdown">活動最高管理 <span class="caret"></span>
+								</a>
+								<a th:case="*" class="dropdown-toggle nav_title" data-toggle="dropdown">活動最高管理 <span
+										class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a th:href="@{/superManager/clubEdit/aboutUs}">社團介紹編輯</a></li>
+									<li><a th:href="@{/superManager/activityType}">活動類型及審核</a></li>
+									<li><a th:href="@{/superManager/adminManagement}">管理員管理</a></li>
+								</ul>
+							</li>
+
+						</ul>
+						<ul class="nav navbar-nav navbar-right" sec:authorize="isAuthenticated()">
+							<li><a th:href="@{/member/modify}"><span sec:authentication="principal.username"></span>
+									您好</a></li>
+							<!-- <li><a th:href="@{/member/modify}"><span sec:authentication="principal.authorities"></span></a></li> -->
+							<!-- <li><form th:action="@{/logout}" method="post">
+                                <input type="submit" value="登出"/>
+                                </form>
+                            </li> -->
+							<li><a href="#modal-id-logout" data-toggle="modal">登出</a></li>
+						</ul>
+						<ul class="nav navbar-nav navbar-right" sec:authorize="!isAuthenticated()">
+							<li><a th:href="@{/showMyLoginPage}"><span class="glyphicon glyphicon-user"></span>
+									社員登入<b></b></a></li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+
+
+		<!-- 登出確認視窗 =======================================-->
+		<div class="modal fade" id="modal-id-logout">
+			<div class="modal-dialog" id="message_dialog_logout">
+				<div class="modal-content">
+
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+						<h4 class="modal-title">您確認要登出</h4>
+					</div>
+					<div class="modal-body" style="padding: 20px;text-align: right">
+						<form th:action="@{/logout}" method="post">
+							<input type="submit" class="btn btn-success" value="確認" />
+						</form>
+					</div>
+					<!--                   <div class="modal-footer">
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div> -->
+
+				</div>
+			</div>
+		</div>
+		<!-- 登出確認視窗 =======================================-->
+	</div>
+
+</body>
+
+</html>

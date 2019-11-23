@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	<persistence-unit name="club">
+		<class>com.badminton.club.entity.Activity</class>
+		<class>com.badminton.club.entity.ActivityType</class>
+		<class>com.badminton.club.entity.Advocate</class>
+		<class>com.badminton.club.entity.Authority</class>
+		<class>com.badminton.club.entity.AvtMessage</class>
+		<class>com.badminton.club.entity.AvtPreview</class>
+		<class>com.badminton.club.entity.Member</class>
+		<class>com.badminton.club.entity.OtherData</class>
+		<class>com.badminton.club.entity.OtherDataAn</class>
+		<class>com.badminton.club.entity.Role</class>
+		<class>com.badminton.club.entity.SignupAvt</class>
+		<class>com.badminton.club.entity.System</class>
+		<class>com.badminton.club.entity.User</class>
+	</persistence-unit>
+</persistence>

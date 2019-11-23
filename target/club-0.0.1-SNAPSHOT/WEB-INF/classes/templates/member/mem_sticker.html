@@ -1,0 +1,238 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>基分撲蝶會活動網站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/member.css}">
+  <link rel="stylesheet" th:href="@{/css/cropper/cropper.css}">
+  <link rel="stylesheet" th:href="@{/css/cropper/cropper_sticker.css}">
+
+
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+   <!-- Spring Security5中默認開啟了CSRF保護，因此提交驗證表單時，必須附帶Token信息 -->
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
+<body>
+
+  <!--導覽列==========================================================================-->
+
+  <div th:replace="header::nav-header"></div>
+  <br>
+  <!-- 幻燈片=================================================================== -->
+  <div th:replace="lightbox::lightbox"></div>
+
+  <!--內容區===================================================================-->
+  <div class="container content">
+    <!--錯誤訊息，及提醒視窗================================================================-->
+    <div th:replace="show_message::show_message"></div>
+    <!--功能及麵包屑==========================================-->
+    <div th:replace="fuctionList::fuctionList"></div>
+    <div th:replace="breadcrumb::breadcrumb"></div>
+    <!--個人資料修改==========================================-->
+    <div class="row">
+      <div class="member_data">
+        <div style="padding-left:5%">
+          <div class="form-group ">
+            <div class="col-md-offset-1">
+              <div class="row">
+                <div class="text-left">
+
+                  <div class="text-left">
+                    <button class="btn btn-primary sticker_btn" id="btnStartShotImage" type="button"
+                      style="width: 30%; background-color: #DDDDDD; color: black">我的圖片</button>
+                    <button class="btn btn-primary sticker_btn" type="button"
+                      style="width: 30%; background-color: #DDDDDD; color: black" onclick="register()">更新圖片</button>
+                    <!-- <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">下載圖片</a> -->
+                  </div>
+                  <font color='grey'>選擇「我的圖片」，裁剪後，點選「更新圖片」。</font><br>
+                </div>
+              </div>
+
+              <br>
+              <div class="row">
+                <div class="col-md-12 col-sm-12">
+                  <div id="show_pic">
+                    <img th:src="@{(${memberDTO.member.memImg})}" id="face_img" alt="">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="modal fade docs-cropped" id="getCroppedCanvasModal" role="dialog" aria-hidden="true"
+                  aria-labelledby="getCroppedCanvasTitle" tabindex="-1">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="getCroppedCanvasTitle">裁剪完成</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body"></div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">確定</button>
+                        <a class="btn btn-primary" id="download" href="javascript:void(0);"
+                          download="cropped.jpg">下載圖片</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 col-sm-12">
+                  <!-- 弹出框 -->
+                  <div class="modal fade" id="myModal" aria-hidden="true" aria-labelledby="avatar-modal-label"
+                    role="dialog" tabindex="-1">
+                    <div class="modal-dialog modal-lg" id="modal-dialog-pic">
+                      <div class="modal-content">
+                        <div class="modal-header">
+
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                          <h1 class="modal-title" id="myModalLabel" style="font-size:20px;">裁取圖片</h1>
+                        </div>
+                        <div class="modal-body">
+
+                          <div class="row" id="actions">
+                            <div class="col-md-12 col-sm-12 docs-buttons">
+
+                              <div class="btn-group">
+                                <label class="btn btn-primary btn-upload" for="inputImage" title="Upload image file">
+                                  <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
+                                  <span class="docs-tooltip" data-toggle="tooltip" title="Import image with Blob URLs">
+                                    <span class="fa fa-upload"></span>上傳圖片
+                                  </span>
+                                </label>
+                              </div>
+
+
+                              <div class="btn-group btn-group-crop">
+                                <button type="button" class="btn btn-success" data-method="getCroppedCanvas"
+                                  data-option="{ &quot;maxWidth&quot;: 4096, &quot;maxHeight&quot;: 4096 }"
+                                  id="getPicture">
+                                  <span class="docs-tooltip" data-toggle="tooltip">
+                                    裁剪
+                                  </span>
+                                </button>
+                              </div>
+
+
+                            </div>
+
+                            <div class="col-md-3 docs-toggles">
+                            </div>
+                          </div>
+                          <br>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="img-container" id="full_image">
+                                <img th:src="@{/images/noPic.gif}" alt="Picture">
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row">
+                            <div class="col-md-1 col-sm-12">
+                              <div class="btn-group d-flex flex-nowrap" data-toggle="buttons">
+                                <label class="btn btn-default active">
+                                  <input type="radio" class="sr-only" id="viewMode0" name="viewMode" value="0" checked>
+                                  <span class="docs-tooltip" data-toggle="tooltip" title="View Mode 0">
+                                    view model
+                                  </span>
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                        <div class="modal-footer">
+                          <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">關閉</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+
+
+
+  <!--底部平台介紹================================================================-->
+  <div th:replace="footer::footer"></div>
+
+
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script th:src="@{/js/sticker.js}"></script>
+  <script th:src="@{/js/cropper/cropper.js}"></script>
+  <script th:src="@{/js/cropper/cropper_sticker.js}"></script>
+  <script th:src="@{/js/cropper/cropper_display.js}"></script>
+  
+  	<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		var header = $("meta[name='_csrf_header']").attr("content");
+		var token = $("meta[name='_csrf']").attr("content");
+
+
+		function register() {
+
+			const canvas = document.querySelector("#show_pic > canvas");
+			if (canvas == null) {
+				alert('請選擇我的圖片，待剪裁完後上傳');
+			}
+
+			// 建立 file，
+			const dataURL = canvas.toDataURL('image/jpg')
+			const blobBin = atob(dataURL.split(',')[1])
+			const array = [];
+			for (let i = 0; i < blobBin.length; i++) {
+				array.push(blobBin.charCodeAt(i));
+			}
+			const file = new Blob([new Uint8Array(array)], { type: 'image/jpg' });
+
+			// 將file 加至 formData
+			const formData = new FormData()
+			formData.append('file', file, [[${ memberDTO.user.username }]] + '.jpg');
+
+			// send ajax request 
+			// Spring Security5中默認開啟了CSRF保護，因此提交驗證表單時，必須附帶Token信息
+			fetch('/badminton/member/doModifySck', {
+				method: 'POST',
+				body: formData,
+				headers: {
+					'X-CSRF-TOKEN': token
+				}
+			}).then(res => res.text())
+				.then(resText => alert('您的大頭貼已成功上傳'))
+
+
+		}
+
+
+		/*]]>*/
+	</script>
+</body>
+
+</html>

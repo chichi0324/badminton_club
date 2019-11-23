@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>基分撲蝶會活動網站</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/avt_item.css}">
+
+
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+	<!-- 幻燈片=================================================================== -->
+	<div th:replace="lightbox::lightbox"></div>
+
+  <!--內容區===================================================================-->
+  <div class="container content">
+    <!--功能及麵包屑==========================================-->
+   <div th:replace="breadcrumb::breadcrumb"></div>
+    <!--錯誤訊息，及提醒視窗================================================================-->
+    <div th:replace="show_message::show_message"></div>
+    
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <div class="avt_title">
+          <h2><b>我要報名</b></h2>
+          <h5 class="avt_type" th:text="'活動名稱 : '+${applyDTO.activity.avtName}"></h5>
+        </div>
+      </div>
+    </div>
+    <form method="post" th:action="@{/activity/search/detail/apply/check}" th:object="${applyDTO}">
+      <div class="avt_detail">
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div class="rep_art" style="padding: 20px">
+              <!-- 帶入隱藏活動編號=================================================-->
+			  <input type="hidden" th:field="*{activity.avtNo}" />			  
+
+              <div class="form-group">
+              <input type="button" name="" onclick="applyTest()" value="假資料">
+                <div>
+                    <font color='red'>*</font>系統將帶入您的個人資料?&nbsp;
+                    <input type="checkbox" name="checkTake" id="personal_data" th:checked="${applyDTO.checkTake =='on'}">確認
+                    <br><br>
+                </div>
+                <div th:each="oth,o: *{otherDatas}">
+                    <br>
+                    <p th:text="'*'+${oth.name}"></p>                    
+                    <input type="text" class="form-control other_data" th:field="*{otherDatas[__${o.index}__].data}" required/>
+                    <input type="hidden" th:field="*{otherDatas[__${o.index}__].no}" />
+                    <input type="hidden" th:field="*{otherDatas[__${o.index}__].name}" />
+                    <br>
+                </div>
+                <br>
+                <div th:if="${applyDTO.activity.avtOnly}">
+                    <input type="hidden" th:field="*{joinNumber}" />
+                </div>
+                <div th:if="not${applyDTO.activity.avtOnly}">
+                    <font color='red'>*</font>參與人數(含自己)?
+                    <button type="button" id="add" style="border-radius:10px;">+</button>
+                    <input type="number" name="joinNumber" id="joinNumber" min="1" style="width: 5%" th:field="*{joinNumber}" readonly/>人
+                    <button type="button" id="less" style="border-radius:10px;">-</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12 col-sm-12">
+            <div  th:if="${applyDTO.activity.avtFrdData}" align="right">
+              <button type="submit" class=" btn btn-danger" data-dismiss="modal" id="apply">送出報名</button>
+              <button type="submit" class=" btn btn-danger" data-dismiss="modal" id="next" style="display: none">下一頁</button>
+            </div>
+            <div  th:if="not${applyDTO.activity.avtFrdData}" align="right">
+              <button type="submit" class=" btn btn-danger" data-dismiss="modal">送出報名</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+
+
+  </div>
+
+
+
+	<!--底部平台介紹================================================================-->
+	<div th:replace="footer::footer"></div>
+
+
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script th:src="@{/js/avt-item-apply.js}"></script>
+  	<script type="text/javascript" >
+
+		function applyTest() {
+			document.getElementById("personal_data").checked = true;
+			document.getElementById("otherDatas0.data").value = "葷";			
+			document.getElementById("otherDatas1.data").value = "王小明";	
+			document.getElementById("otherDatas2.data").value = "0967367841";	
+			document.getElementById("joinNumber").value = "4";	
+		}
+
+	</script>
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+  <title>基分撲蝶會活動網站</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="short Icon" type="images/x-icon" th:href="@{/images/ball.png}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/manger_activity_signAdd.css}">
+
+  <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+
+	<div th:replace="header::nav-header"></div>
+	<br>
+	
+	<!--主題圖片===================================================================-->
+	<div th:replace="lightbox::lightbox"></div>
+
+  <!--內容區===================================================================-->
+  <div class="container content">
+    <!--功能及麵包屑==========================================-->
+    <div th:replace="breadcrumb::breadcrumb"></div>
+    <!--錯誤訊息，及提醒視窗================================================================-->
+    <div th:replace="show_message::show_message"></div>
+    <div class="row">
+      <div class="col-md-12 col-sm-12">
+        <div class="avt_title">
+          <h2><b>會員資料</b></h2>
+          <h5 class="avt_type" th:text="'活動名稱 : '+${queryDTO.activity.avtName}"></h5>
+        </div>
+      </div>
+    </div>
+    <!--複合式查詢活動==========================================-->
+    <div class="avt_detail">
+    <div class="row">
+      <div class="search">
+          <div class="search">
+            <form class="form-horizontal" th:action="@{/manager/activityManagement/search/detail/signAvtData/add/member/search}" 
+                  method="post" th:object="${queryDTO}" style="display:inline;">
+            
+            <label class="control-label" for="keyWord">
+              <span class="glyphicon glyphicon-search"></span> 依關鍵字:&nbsp;
+            </label>
+            <input class="search_input" type="text" name="keyWord" id="keyWord" placeholder="輸入會員帳號或姓名" th:field="*{keyWord}" >
+            &nbsp;&nbsp;
+            
+            <input type="hidden" th:field="*{activity.avtNo}" />
+            <input type="hidden" th:field="*{check}" />
+            
+            <button type="submit" class="btn btn-success">查詢</button>
+            </form>
+            <br>
+          </div>
+      </div>
+      
+    </div>
+    <!--會員查詢結果==========================================-->
+    
+    <div class="row" th:if="${show_search_result}">
+      <div class="join_member">
+        <table class="table table-striped table-bordered table-rwd">
+          <tr class="tr-only-hide">
+            <th style="white-space: nowrap;padding-right:6em">功能</th>
+            <th style="white-space: nowrap;">會員帳號</th>         
+            <th style="white-space: nowrap;padding-right:2em">姓名</th>
+            <th style="white-space: nowrap;padding-right:1em">性別</th>
+            <th style="white-space: nowrap;padding-right:4.5em">生日</th>
+            <th style="white-space: nowrap;">身分證</th>
+            <th style="white-space: nowrap;">手機號碼</th> 　
+            <th style="white-space: nowrap;">Email</th>
+            <th style="white-space: nowrap;padding-right:10em">地址</th>           
+          </tr>
+          <tr th:each="memberDTO: ${queryDTO.memberDTOs}">         
+            <td data-th="功能">
+                <form method="post" th:action="@{/manager/activityManagement/search/detail/signAvtData/add/member/bring}" style="display:inline;">
+                    <input type="hidden" name="avtNo" th:value="${queryDTO.activity.avtNo}" />
+			        <input type="hidden" name="check" th:value="${queryDTO.check}" />
+			        <input type="hidden" name="userName" th:value="${memberDTO.member.memUser}" />
+			        <button type="submit" class=" btn btn-default">載入資料</button>
+                </form>
+            </td>
+            <td data-th="會員帳號">
+                <p th:text="${memberDTO.member.memUser}"></p>
+            </td>
+            <td data-th="姓名">
+                <p th:text="${memberDTO.member.memName}"></p>
+            </td>
+            <td data-th="性別">
+                <p th:if="${memberDTO.member.memGen=='M'}">男</p>
+                <p th:if="${memberDTO.member.memGen=='W'}">女</p>
+            </td>
+            <td data-th="生日">
+                <p th:text="${memberDTO.member.memBirth}"></p>
+            </td>
+            <td data-th="身分證">
+                <p th:text="${memberDTO.member.memIdn}"></p>
+            </td>
+            <td data-th="手機號碼">
+                <p th:text="${memberDTO.member.memPhone}"></p>
+            </td>
+            <td data-th="Email">
+                <p th:text="${memberDTO.member.memMail}"></p>
+            </td>
+            <td data-th="地址">
+                <p th:text="${memberDTO.member.memAddr}"></p>
+            </td>            
+          </tr>
+        </table>
+      </div>
+    </div>
+    <!--  查無資料 -->
+	<div class="row" th:if="not${show_search_result}">
+        <div class="col-md-12 col-sm-12 " align="center">
+		   <label style="color:red;font-style:italic;">查無資料</label>
+		</div>
+	</div>
+  </div>
+</div>
+
+
+  <!--底部平台介紹================================================================-->
+<div th:replace="footer::footer"></div>
+
+
+  <script th:src="@{/js/show_message.js}"></script>
+  <script src="https://code.jquery.com/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script th:src="@{/js/checkbox.js}"></script>
+</body>
+
+</html>

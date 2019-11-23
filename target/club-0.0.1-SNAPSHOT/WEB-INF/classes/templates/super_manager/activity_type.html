@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+<title>基分撲蝶會活動網站</title>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="short Icon" type="images/x-icon"
+	th:href="@{/images/ball.png}">
+<link rel="stylesheet" th:href="@{/css/base.css}">
+<link rel="stylesheet" th:href="@{/css/super_manager.css}">
+
+<script async defer crossorigin="anonymous"
+	src="https://connect.facebook.net/zh_TW/sdk.js#xfbml=1&version=v4.0"></script>
+</head>
+
+<body>
+
+
+
+	<!--導覽列==========================================================================-->
+	<div th:replace="header::nav-header"></div>
+	<br>
+
+	<!--主題圖片===================================================================-->
+	<div th:replace="lightbox::lightbox"></div>
+
+	<!--內容區===================================================================-->
+	<div class="container content">
+		<!--功能及麵包屑==========================================-->
+		<div th:replace="breadcrumb::breadcrumb"></div>
+		<!--錯誤訊息，及提醒視窗================================================================-->
+		<div th:replace="show_message::show_message"></div>
+		<!--複合式查詢活動==========================================-->
+		<div class="row">
+
+				<div class="search">
+					<div class="search">
+					    <form class="form-horizontal" th:action="@{/superManager/activityType/search}" method="GET" 
+					          th:object="${queryDTO}"  style="display:inline;">
+						<label class="control-label" for="keyWord"> <span
+							class="glyphicon glyphicon-search"></span> 依關鍵字:&nbsp;
+						</label> 
+						<input class="search_input" type="text" name="keyWord"
+							id="keyWord" value="" placeholder="輸入活動類型關鍵字"
+							th:field="*{keyWord}"> &nbsp; 
+						<button type="submit" class="btn btn-default"><b>查詢</b></button>
+						</form>
+						<form method="post" th:action="@{/superManager/activityType/modify}" style="display:inline;">
+                            <input type="hidden" name="typeId" value="-1" />
+                            <input type="hidden" name="keyWord" value="" />
+			                <button type="submit" class=" btn btn-default">新增類型</button>
+                        </form>
+						<br><br>
+					</div>
+				</div>
+			
+		</div>
+
+		<!--活動類型查詢結果==========================================-->
+		<div class="row">
+			<div class="col-md-6 col-sm-12" th:if="${show_search_result}">
+				<div class="activity_type">
+					<table class="table table-striped table-bordered table-rwd">
+						<tr class="tr-only-hide">
+							<th>活動類型編號</th>
+							<th>活動類型名稱</th>
+							<th>功能</th>
+						</tr>
+						<tr th:each="typeDTO, t: ${queryDTO.activityTypes}">
+							<td data-th="活動類型編號">
+							    <p th:text="${typeDTO.avtTypeNo}"></p>
+							</td>
+							<td data-th="活動類型名稱">
+							    <p th:text="${typeDTO.avtTypeName}"></p>
+							</td>
+							<td data-th="功能">
+                                <form method="post" th:action="@{/superManager/activityType/modify}" style="display:inline;">
+                                   <input type="hidden" name="typeId" th:value="${typeDTO.avtTypeNo}" />
+                                   <input type="hidden" name="keyWord" th:value="${queryDTO.keyWord}" />
+			                       <button type="submit" class=" btn btn-default">修改</button>
+                                </form>
+							    <form method="post" th:action="@{/superManager/activityType/delete}" style="display:inline;">
+                                   <input type="hidden" name="typeId" th:value="${typeDTO.avtTypeNo}" />
+                                   <input type="hidden" name="keyWord" th:value="${queryDTO.keyWord}" />
+			                       <button type="submit" class=" btn btn-default" onclick="if (!(confirm('您確認要刪除這項活動類型?\n(注意:將會連同該類型所有活動及相關資料一併刪除)'))) return false">刪除</button>
+                               </form>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!--  查無資料 -->
+	       <div class="col-md-6 col-sm-12" th:if="not${show_search_result}">
+               <div class="col-md-12 col-sm-12 " align="center">
+		           <label style="color:red;font-style:italic;">查無資料</label>
+		       </div>
+	      </div>
+		</div>
+
+
+	</div>
+
+
+
+	<!--底部平台介紹================================================================-->
+	<div th:replace="footer::footer"></div>
+
+
+	<script th:src="@{/js/show_message.js}"></script>
+	<script src="https://code.jquery.com/jquery.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+
+</html>
