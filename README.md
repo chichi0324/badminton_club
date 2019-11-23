@@ -21,6 +21,9 @@ https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.1.9
 啟動指令<br>
 ./mvnw spring-boot:run<br>
 
+url:<br>
+http://localhost:8080/badminton/<br>
+
 
 eclipse自動建立entity<br>
 https://blog.csdn.net/EightSwords/article/details/79022305<br>
