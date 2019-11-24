@@ -12,6 +12,7 @@ import java.util.List;
  * 會員
  */
 @Entity
+@Table(name="member")
 @NamedQuery(name="Member.findAll", query="SELECT m FROM Member m")
 public class Member  {
 	private static final long serialVersionUID = 1L;

@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
  * 活動
  */
 @Entity
+@Table(name="activity")
 @NamedQuery(name="Activity.findAll", query="SELECT a FROM Activity a")
 public class Activity  {
 	private static final long serialVersionUID = 1L;
