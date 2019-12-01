@@ -30,13 +30,14 @@ import com.badminton.club.entity.SignupAvt;
 import com.badminton.club.service.ActivityService;
 import com.badminton.club.service.BasicService;
 import com.badminton.club.service.MemberService;
+import com.badminton.club.service.impl.BasicServiceImpl;
 /**
  * 活動專區(活動總覽，活動報名) 控制器
  */
 @Controller
 @RequestMapping("/activity")
 public class ActivityController extends BaseController{
-	
+		
 
 	@Autowired
 	private ActivityService activityService;
@@ -335,13 +336,6 @@ public class ActivityController extends BaseController{
 	 */
 	public List<String> verifyApply(ApplyDTO applyDTO) {
 
-		System.out.println("---------------基本資料------------------");
-		System.out.println("活動編號:" + applyDTO.getActivity().getAvtNo());
-		System.out.println("人數:" + applyDTO.getJoinNumber());
-		applyDTO.getOtherDatas().forEach(ot -> {
-			System.out.println(ot.getNo() + "." + ot.getName() + ":" + ot.getData());
-		});
-
 		List<String> mistakes = new ArrayList<>();
 
 		if (StringUtils.isBlank(applyDTO.getCheckTake())) {
@@ -374,26 +368,6 @@ public class ActivityController extends BaseController{
 	public List<String> verifyApplyAll(ApplyAllDTO applyAllDTO) {
 		List<String> mistakes = new ArrayList<>();
 
-		System.out.println("---------------基本資料------------------");
-		System.out.println("活動編號:" + applyAllDTO.getApplyDTO().getActivity().getAvtNo());
-		System.out.println("人數:" + applyAllDTO.getApplyDTO().getJoinNumber());
-		applyAllDTO.getApplyDTO().getOtherDatas().forEach(ot -> {
-			System.out.println(ot.getNo() + "." + ot.getName() + ":" + ot.getData());
-		});
-		System.out.println("-----------------親友資料----------------");
-		applyAllDTO.getFriendDTOs().forEach(f -> {
-			System.out.println("姓名:" + f.getSignupAvt().getSignName());
-			System.out.println("性別:" + f.getSignupAvt().getSignGen());
-			System.out.println("生日:" + f.getBirthDate());
-			System.out.println("身分證:" + f.getSignupAvt().getSignIdn());
-			System.out.println("手機號碼:" + f.getSignupAvt().getSignPhone());
-			System.out.println("Email:" + f.getSignupAvt().getSignMail());
-			System.out.println("地址:" + f.getSignupAvt().getSignAddr());
-			f.getOtherDatas().forEach(o -> {
-				System.out.println(o.getNo() + "." + o.getName() + ":" + o.getData());
-			});
-			System.out.println("---------------------------------");
-		});
 		for (int i = 1; i <= applyAllDTO.getFriendDTOs().size(); i++) {
 			FriendDTO friend = applyAllDTO.getFriendDTOs().get(i - 1);
 			// 確認姓名

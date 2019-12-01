@@ -3,6 +3,7 @@ package com.badminton.club.service.impl;
 import java.io.File;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -308,6 +309,9 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 			if (!"on".equals(activityDTO.getAvtEdit()) && activity.getAvtStat() == null) {
 				activity.setAvtStat("報名中");
 			}
+			
+			//新增/修改  舊活動
+			this.setOldActivity(activity);
 
 			if ("新增活動".equals(PreviousActivityDTO.getAddOrEdit())) {
 
@@ -354,6 +358,23 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 			return PreviousActivityDTO.getActivity().getAvtNo();
 		} catch (Exception e) {
 			log.debug(e.getMessage());
+			throw e;
+		}
+	}
+	
+	/**
+	 * "舊活動"資料
+	 */
+	public void setOldActivity(Activity activity) {
+		try {
+			
+			Date nowDate=new Date();
+			if(nowDate.after(activity.getAvtDateS())){
+				activity.setAvtStat("已結束");
+				activity.setAvtPre((byte)1);
+			}
+
+		} catch (Exception e) {
 			throw e;
 		}
 	}
