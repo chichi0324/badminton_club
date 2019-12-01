@@ -51,8 +51,7 @@ public class BaseController {
 		theModel.addAttribute("activities_show", theActivities);
 		//活動類型(下拉式選單)
 		theModel.addAttribute("activitieTypes", basicService.getAllActivityType());
-		//底下footer
-		getFooter(theModel);
+
 	}
 
 	/**
@@ -91,14 +90,6 @@ public class BaseController {
 			FileTool.deleteFile("/images/activity/avt_" + this.getUserId() + "/adv_" + i + ".jpg");
 		}
 		FileTool.deleteDirectory("/images/activity/avt_" + this.getUserId() + "/");
-	}
-
-	/**
-	 * 底下footer
-	 */
-	public void getFooter(Model theModel) {
-		FooterDTO footerDTO = this.basicService.getFooter();
-		theModel.addAttribute("footerDTO", footerDTO);
 	}
 
 

@@ -18,6 +18,20 @@
 					</div>
 					<div class="collapse navbar-collapse" id="myNavbar">
 						<ul class="nav navbar-nav">
+						   <li class="dropdown" th:switch="${focus}">
+								<a th:case="'introduce'" class="dropdown-toggle nav_title" data-toggle="dropdown"
+									style="background-color: #0000AA; border-color: #0000AA; color: white;">社團介紹
+									<span class="caret"></span>
+								</a>
+								<a th:case="*" class="dropdown-toggle nav_title" data-toggle="dropdown">社團介紹
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a th:href="@{/introduce/aboutUs}">關於我們</a></li>
+									<li><a th:href="@{/introduce/contact}">聯絡資訊</a></li>
+									<li><a th:href="@{/introduce/qrCode}">line QRCode</a></li>
+								</ul>
+							</li>
 							<li class="dropdown" th:switch="${focus}">
 								<a th:case="'activity'" class="dropdown-toggle nav_title" data-toggle="dropdown"
 									style="background-color: #0000AA; border-color: #0000AA; color: white;">活動專區

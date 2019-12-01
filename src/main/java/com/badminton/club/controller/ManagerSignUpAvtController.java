@@ -87,7 +87,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 									+ queryDTO.getActivity().getAvtNo()),
 					"報名人員清冊");//
 
-			this.getFooter(theModel);
+
 
 			return "manager/activity/signAvtData";
 		} catch (Exception e) {
@@ -127,7 +127,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 							"/manager/activityManagement/search/detail?activityId="
 									+ queryDTO.getActivity().getAvtNo()),
 					"報名人員清冊");//
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/signAvtData";
 		} catch (Exception e) {
@@ -196,7 +196,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + queryDTO.getCheck()), //
 					"新增人員");//
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/signEdit";
 		} catch (Exception e) {
@@ -239,7 +239,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ avtNo + "&check=" + check), //
 					"新增人員(會員資料查詢)");//
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/signEdit_member";
 		} catch (Exception e) {
@@ -280,7 +280,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + queryDTO.getCheck()), //
 					"新增人員(會員資料查詢)");//
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/signEdit_member";
 		} catch (Exception e) {
@@ -355,7 +355,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + check), //
 					"修改");//
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/signEdit";
 		} catch (Exception e) {

@@ -1,0 +1,18 @@
+.intr_content{
+	font-size:16px;
+	word-wrap:break-word;
+	white-space: pre-wrap;
+	border:none;
+	background-color: white;
+}
+
+#intr_img{
+	width:25%;
+}
+
+/*小螢幕(ex:iphone)*/
+@media only screen and (max-width: 600px) {
+	#intr_img{
+	width:85%;
+    }
+}

@@ -1,7 +1,6 @@
 package com.badminton.club.service.impl;
 
 import java.util.ArrayList;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -59,19 +58,13 @@ public class BasicServiceImpl implements BasicService {
 	}
 	
 	/**
-	 * 底下footer資料
+	 * 社團介紹資料
 	 */
 	@Override
-	public FooterDTO getFooter() {
-		System systemAboutUs=this.systemRepository.findSystem("關於我們");
-		System systemContact=this.systemRepository.findSystem("聯絡資訊");
-		System systemQrCode=this.systemRepository.findSystem("QrCode");
-		
-		FooterDTO footerDTO=new FooterDTO();
-		footerDTO.setAboutUs(systemAboutUs.getSysCon());
-		footerDTO.setContact(systemContact.getSysCon());
-		footerDTO.setLineQrCode(systemQrCode.getSysData());
-		return footerDTO;
+	public System getIntroduceSystem(String sysName){
+		System system=this.systemRepository.findSystem(sysName);
+
+		return system;
 	}
 
 

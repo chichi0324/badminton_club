@@ -6,20 +6,16 @@
 	<div th:fragment="footer">
 		<footer>
 			<div class="container">
-				<div class="col-sm-2">
+				<div class="col-sm-1">
 					<img th:src="@{/images/ball.png}" class="img-responsive">
 				</div>
 				<div class="col-sm-4">
-					<h5>關於我們</h5>
-					<pre th:text="${footerDTO.aboutUs}" class="footer_introduce"></pre>
+					<h5 class="footer_introduce">© CHIA-CHI. 版權所有 轉載必究・</h5>
 				</div>
 				<div class="col-sm-3">
-					<h5>聯絡資訊</h5>
-					<pre th:text="${footerDTO.contact}" class="footer_introduce"></pre>
+					<h5 class="footer_introduce">網站客服: j43343@gmail.com</h5>
 				</div>
 				<div class="col-sm-3">
-					<h5>基分撲蝶會活動網站line</h5>
-					<img th:src="@{(${footerDTO.lineQrCode})}" class="qrCode"> <br>
 				</div>
 			</div>
 		</footer>

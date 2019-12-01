@@ -48,7 +48,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "關於我們");
-            this.getFooter(theModel);
+            
 			
 			return "super_manager/introduce/aboutUs";
 		} catch (Exception e) {
@@ -73,7 +73,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "關於我們");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/aboutUs";
 		} catch (Exception e) {
@@ -97,7 +97,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "聯絡資訊");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/contact";
 		} catch (Exception e) {
@@ -122,7 +122,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "聯絡資訊");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/contact";
 		} catch (Exception e) {
@@ -145,7 +145,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"), "系統信箱設定",
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "系統信箱設定");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/email";
 		} catch (Exception e) {
@@ -170,7 +170,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"), "系統信箱設定",
 					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "系統信箱設定");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/email";
 		} catch (Exception e) {
@@ -193,7 +193,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"),
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"), "line QRCode");
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "line QRCode");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/introduce/qrCode";
 		} catch (Exception e) {
@@ -212,7 +212,7 @@ public class SuperManagerController extends BaseController{
 					new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"),
 					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"), "line QRCode");
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "line QRCode");
-			this.getFooter(theModel);
+			
 			
 			// 帶入系統資料(QRCode)
 			System theSystem = this.superManagerService.getSystem("QrCode");			
@@ -255,7 +255,7 @@ public class SuperManagerController extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryActivityTypeDTO);
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "活動類型及審核");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/activity_type";
 		} catch (Exception e) {
@@ -275,7 +275,7 @@ public class SuperManagerController extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryActivityTypeDTO);
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "活動類型及審核");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/activity_type";
 		} catch (Exception e) {
@@ -307,7 +307,7 @@ public class SuperManagerController extends BaseController{
 			theModel.addAttribute("queryDTO", queryActivityTypeDTO);
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理",
 					new BreadDTO("活動類型及審核", "/superManager/activityType"), queryActivityTypeDTO.getAddOrUpdate());
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/activity_type_modify";
 
@@ -375,7 +375,7 @@ public class SuperManagerController extends BaseController{
 			QueryMemberQualifyDTO queryMemberQualifyDTO = superManagerService
 					.findMemberAllData(new QueryMemberQualifyDTO());
 			this.showResult(queryMemberQualifyDTO.getMemberDTOs(), theModel);
-			this.getFooter(theModel);
+			
 			
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "管理員管理");
@@ -398,7 +398,7 @@ public class SuperManagerController extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			this.breadcrumbAndNavbar(theModel, "superManager", "活動管理", "社員管理");
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/qualification";
 		} catch (Exception e) {
@@ -417,7 +417,7 @@ public class SuperManagerController extends BaseController{
 			this.superManagerService.updateMemberAuth(queryDTO.getMemberDTOs());
 			this.showMessage(theModel, "更新成功", "notice");
 			this.adminSearch(theModel, queryDTO);
-			this.getFooter(theModel);
+			
 			
 			return "super_manager/qualification";
 		} catch (Exception e) {

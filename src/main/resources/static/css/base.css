@@ -161,11 +161,10 @@ ul .show {
 footer {
 	background-color: black;
 	color: white;
-	margin-top: 3em;
 }
 
 footer h5, footer .img-responsive {
-	margin-top: 4em;
+	margin-top: 1.5em;
 	font-weight: bold;
 	color: lightblue;
 }
@@ -187,12 +186,9 @@ footer a : hover {
 	border:none;
 	color:white;
 	background-color:black;
+	
 }
 
-.qrCode {
-	margin-bottom: 2em;
-	width:50%;
-}
 
 @media only screen and (max-width: 600px) {
 	.qrCode {

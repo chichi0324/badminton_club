@@ -75,7 +75,7 @@ public class ManagerActivityController extends BaseController{
 			// 活動類型(下拉式選單)
 			theModel.addAttribute("activitieTypes", basicService.getAllActivityType());
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "我的活動管理");
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/all";
 		} catch (Exception e) {
@@ -100,7 +100,7 @@ public class ManagerActivityController extends BaseController{
 			// 活動類型(下拉式選單)
 			theModel.addAttribute("activitieTypes", basicService.getAllActivityType());
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "我的活動管理");
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/all";
 		} catch (Exception e) {
@@ -122,7 +122,7 @@ public class ManagerActivityController extends BaseController{
 			theModel.addAttribute("check", 0);// 是否從活動審核入口進去(1:true,0;false)
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", new BreadDTO("我的活動管理", "/manager/activityManagement"),
 					theActivity.getAvtName());
-			this.getFooter(theModel);
+			
 
 			return "activity/avt-item";
 		} catch (Exception e) {
@@ -149,7 +149,7 @@ public class ManagerActivityController extends BaseController{
 			theModel.addAttribute("activityDTO", activityDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", new BreadDTO("我的活動管理", "/manager/activityManagement"),
 					activityDTO.getAddOrEdit());
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/edit";
 		} catch (Exception e) {
@@ -177,7 +177,7 @@ public class ManagerActivityController extends BaseController{
 			theModel.addAttribute("activityDTO", activityDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", new BreadDTO("我的活動管理", "/manager/activityManagement"),
 					activityDTO.getAddOrEdit());
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/edit";
 		} catch (Exception e) {
@@ -203,7 +203,7 @@ public class ManagerActivityController extends BaseController{
 				
 				this.breadcrumbAndNavbar(theModel, "manager", "活動管理",
 						new BreadDTO("我的活動管理", "/manager/activityManagement"), activityDTO.getAddOrEdit());
-				this.getFooter(theModel);
+				
 				return "manager/activity/edit";
 			}
 			this.managerActivityService.getActivityAdvocateDTO(activityDTO, this.getUserId());
@@ -217,7 +217,7 @@ public class ManagerActivityController extends BaseController{
 			theModel.addAttribute("advocate_count", activityDTO.getActivity().getAdvocates().size());
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", new BreadDTO("我的活動管理", "/manager/activityManagement"),
 					activityDTO.getAddOrEdit(), "活動圖片");
-			this.getFooter(theModel);
+			
 
 			return "manager/activity/edit_next";
 		} catch (Exception e) {

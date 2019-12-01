@@ -2,7 +2,7 @@ package com.badminton.club.service;
 
 import java.util.List;
 
-import com.badminton.club.dto.FooterDTO;
+import com.badminton.club.entity.System;
 import com.badminton.club.entity.Activity;
 import com.badminton.club.entity.ActivityType;
 import com.badminton.club.entity.Member;
@@ -31,9 +31,9 @@ public interface BasicService {
 	
 	
 	/**
-	 * 底下footer資料
+	 * 社團介紹資料
 	 */
-	public FooterDTO getFooter();
+	public System getIntroduceSystem(String sysName);
 	
 	/**
 	 * 取得所有活動類型

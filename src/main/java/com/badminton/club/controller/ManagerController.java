@@ -50,7 +50,7 @@ public class ManagerController  extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryActivityCheckDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "活動審核");
-			this.getFooter(theModel);
+			
 
 			return "manager/check";
 		} catch (Exception e) {
@@ -72,7 +72,7 @@ public class ManagerController  extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryActivityCheckDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "活動審核");
-			this.getFooter(theModel);
+			
 
 			return "manager/check";
 		} catch (Exception e) {
@@ -92,7 +92,7 @@ public class ManagerController  extends BaseController{
 			this.managerService.updateActivity(queryDTO.getActivityDTOs(), this.getUserId());
 			this.showMessage(theModel, "更新成功", "notice");
 			this.activityReviewSearch(theModel, queryDTO);
-			this.getFooter(theModel);
+			
 
 			return "manager/check";
 		} catch (Exception e) {
@@ -114,7 +114,7 @@ public class ManagerController  extends BaseController{
 			theModel.addAttribute("check", 1);// 是否從活動審核入口進去(1:true,0;false)
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", new BreadDTO("活動審核", "/manager/activityReview"),
 					theActivity.getAvtName());
-			this.getFooter(theModel);
+			
 
 			return "activity/avt-item";
 		} catch (Exception e) {
@@ -135,7 +135,7 @@ public class ManagerController  extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "社員管理");
-			this.getFooter(theModel);
+			
 
 			return "manager/member";
 		} catch (Exception e) {
@@ -155,7 +155,7 @@ public class ManagerController  extends BaseController{
 
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", "活動管理", "社員管理");
-			this.getFooter(theModel);
+			
 
 			return "manager/member";
 		} catch (Exception e) {
@@ -175,7 +175,7 @@ public class ManagerController  extends BaseController{
 			this.managerService.updateMemberAuth(queryDTO.getMemberDTOs());
 			this.showMessage(theModel, "更新成功", "notice");
 			this.memberSearch(theModel, queryDTO);
-			this.getFooter(theModel);
+			
 
 			return "manager/member";
 		} catch (Exception e) {
@@ -205,7 +205,7 @@ public class ManagerController  extends BaseController{
 			FileTool.downLoadFile(request, response, FileTool.resource_prefix("/images/manager/member"),"會員清冊.csv");
 
 			this.memberSearch(theModel, queryMemberQualifyDTO);
-			this.getFooter(theModel);
+			
 
 			return "manager/member";
 		} catch (Exception e) {
