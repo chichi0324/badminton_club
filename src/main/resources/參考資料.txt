@@ -1,0 +1,55 @@
+Spring_Initializr_link
+https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.1.9.RELEASE&packaging=war&jvmVersion=1.8&groupId=com.badminton&artifactId=club&name=club&description=Demo%20project%20for%20Spring%20Boot&packageName=com.badminton.club&dependencies=devtools,thymeleaf,web,data-jpa,mysql
+
+
+打包指令
+$ cd /Users/xujiaqi/java_web/other/club
+$ ./mvnw package
+
+
+啟動指令
+$ cd /Users/xujiaqi/java_web/other/club
+$ ./mvnw spring-boot:run
+
+
+eclipse自動建立entity
+https://blog.csdn.net/EightSwords/article/details/79022305
+
+
+Querydsl-JPA學習
+https://juejin.im/post/5d5cad3d518825168e6a0d3d
+
+
+
+linux安裝java
+1.官網安裝jdk-8u202-linux-x64.tar.gz
+2.FileZilla傳至/usr/java
+(若無權限，sudo chmod a+rwx /usr)
+3.解壓縮tar zxvf jdk-8u202-linux-x64.tar.gz 
+4.vim /etc/profile
+(若readOnly，sudo chmod a+rwx /etc/profile)
+
+貼上：
+
+#set java environment
+export JAVA_HOME=/usr/java/jdk1.8.0_202
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=$JAVA_HOME/lib:$CLASSPATH
+export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$PATH
+
+5.修改生效
+source /etc/profile
+
+6.java -version
+
+7.spring boot部署
+https://blog.csdn.net/DoUUnderstand/article/details/79818447
+
+8.mysql
+https://andy6804tw.github.io/2019/01/29/ubuntu-mysql-setting/
+
+****.linux語系
+http://perrywu0606.pixnet.net/blog/post/17190109
+
+****.root帳密
+https://www.ewdna.com/2012/06/ubuntu-root.html
