@@ -51,6 +51,10 @@ source /etc/profile
 
 7.spring boot部署
 https://blog.csdn.net/DoUUnderstand/article/details/79818447
+jar打包：
+https://matthung0807.blogspot.com/2019/02/springbootspring-bootjar.html
+(配置檔案放到外部：
+https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/298083/)
 
 8.mysql
 https://andy6804tw.github.io/2019/01/29/ubuntu-mysql-setting/
@@ -66,13 +70,13 @@ linux安裝docker
 https://blog.gtwang.org/virtualization/ubuntu-linux-install-docker-tutorial/
 http://andy51002000.blogspot.com/2019/02/docker-permission-denied.html
 
-Gap linux ssh
+Gcp linux ssh
 https://www.youtube.com/watch?v=2ibBF9YqveY
 http://blog.maxkit.com.tw/2017/04/linux-mac-ssh-gcp.html
 若有錯誤：
 https://ithelp.ithome.com.tw/articles/10083004
 
-Gap linux filezilla
+Gcp linux filezilla
 https://digital-transformation.media/google-cloud-platform/gce-linux-sftp-setting/
 
 linux台灣時區
