@@ -60,6 +60,8 @@ https://codertw.com/%E7%A8%8B%E5%BC%8F%E8%AA%9E%E8%A8%80/298083/)
 https://andy6804tw.github.io/2019/01/29/ubuntu-mysql-setting/
 
 ****.linux語系
+安裝：sudo apt install --reinstall locales
+ sudo apt-get install locale-gen
 http://perrywu0606.pixnet.net/blog/post/17190109
 
 ****.root帳密

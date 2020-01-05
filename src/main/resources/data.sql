@@ -1,9 +1,3 @@
---
--- 設定台灣時區(+08:00)
---
-
-SET @@session.time_zone = '+08:00';
-select NOW();
 
 
 
