@@ -37,5 +37,8 @@ Spring boot Https<br>
 https://my.oschina.net/wangnian/blog/761652<br>
 
 
-部署及上線<br>
-https://github.com/chichi0324/club<br>
+Linux部署Spring boot：<br>
+https://hackmd.io/@k0kfBUuESY6uU14XsQvp_A/rJFoRyRRH/%2FEoietx6ITiywKXbu3idIaw<br>
+
+上線網址：<br>
+https://35.185.156.116:8443/badminton/<br>
