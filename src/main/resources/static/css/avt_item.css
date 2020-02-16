@@ -77,7 +77,7 @@
 }
 
 .face_message{
-  width: 100%;
+  width: 120%;
 }
 
 .face_message_response{
@@ -86,9 +86,6 @@
 
 /*小螢幕(ex:iphone)*/
 @media only screen and (max-width: 600px){
-  .face_message{
-    width: 50%;
-  }
 
   .face_message_response{
     width: 60px;
@@ -177,21 +174,28 @@
   width: 90%;
 }
 
+.avt_detail_littleman{
+     display:block;
+}
+
 /*小螢幕(ex:iphone)*/
 @media only screen and (max-width: 600px){
   .column {
     width: 20%;
     float:left;
   }
+  .avt_detail_littleman{
+     display:none;
+  }
 }
-
+/*中螢幕(ex:ipad)*/
 @media only screen and (max-width: 768px) and (min-width: 601px){
   .column {
     width: 20%;
     float:left;
   }
-  .face_message{
-    width: 60%;
+  .avt_detail_littleman{
+     display:none;
   }
 }
 

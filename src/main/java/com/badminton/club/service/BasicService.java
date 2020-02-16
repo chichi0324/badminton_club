@@ -72,4 +72,10 @@ public interface BasicService {
 	 * 驗證活動限制名額是否額滿，若額滿更新活動狀態(改為"已額滿")
 	 */
 	public void updateActivityStatus(int theId);
+	public void updateActivityStatus(Activity activity);
+	
+	/**
+	 * 取得所有管理員資料
+	 */
+	public List<Member> getAllManager();
 }

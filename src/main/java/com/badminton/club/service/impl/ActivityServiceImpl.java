@@ -1,5 +1,6 @@
 package com.badminton.club.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ import com.badminton.club.service.ActivityService;
 import com.badminton.club.service.BasicService;
 import com.badminton.club.tools.DateTool;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 /**
  * 活動專區(活動總覽，活動報名) 服務
@@ -62,12 +64,14 @@ public class ActivityServiceImpl implements ActivityService {
 	}
 
 	/**
-	 * 活動總覽所有活動 (審核通過，非草稿) 照活動起始日排序(新-->舊)
+	 * 依條件搜尋活動(複合式查詢)
+	 * 查詢結果總筆數
 	 */
 	@Override
-	public List<Activity> findAll() {
+	public int searchCount(QueryActivityDTO queryActivityDTO) {
 		try {
-			return this.activityRepository.findActivityByDesc();
+			int count=this.search(queryActivityDTO, 0, 0).size();
+			return count;
 		} catch (Exception e) {
 			throw e;
 		}
@@ -76,9 +80,11 @@ public class ActivityServiceImpl implements ActivityService {
 
 	/**
 	 * 依條件搜尋活動(複合式查詢)
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
 	@Override
-	public List<Activity> search(QueryActivityDTO queryActivityDTO) {
+	public List<Activity> search(QueryActivityDTO queryActivityDTO,int indexPage,int countOnePage) {
 		try {
 			String keyWord = queryActivityDTO.getKeyWord();
 			String type = queryActivityDTO.getType();
@@ -109,9 +115,19 @@ public class ActivityServiceImpl implements ActivityService {
 				}
 				whereSQL = whereSQL.and(activity.avtStat.eq(status));
 			}
-
-			List<Activity> activityQuerys = jpaQueryFactory.selectFrom(activity).from(activity).where(whereSQL)
-					.orderBy(activity.avtDateS.desc()).fetch();
+			
+			JPAQuery<Activity> jPAQuerys = jpaQueryFactory.selectFrom(activity).from(activity).where(whereSQL)
+					.orderBy(activity.avtDateS.desc());
+			
+			List<Activity> activityQuerys=new ArrayList<>();
+			if(indexPage==0 && countOnePage==0){ //無分頁
+				activityQuerys=jPAQuerys.fetch();
+			}else{  //有分頁
+				if(indexPage>=1){
+					indexPage=indexPage-1;
+				}
+				activityQuerys=jPAQuerys.offset(indexPage*8).limit(countOnePage).fetch();
+			}
 			
 			log.info("keyWord:{}, type:{}, status:{}, results:{}", keyWord, type, activityQuerys==null ? null :activityQuerys.size());
 

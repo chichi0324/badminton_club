@@ -46,16 +46,15 @@
       <input type="hidden" th:field="*{activity.avtNo}" />
     
       <div class="row">
-        <input type="button" name="" onclick="test()" value="假資料">
         <div class="col-md-6 col-sm-12">
           <div class="member_data">
-
+            <input type="button" name="" onclick="test()" value="假資料">
             <div class="form-group">
               <label class="control-label col-sm-3">
                 <font color='red'>*</font>&nbsp;活動名稱:
               </label>
               <div class="col-sm-9">
-                <input type="text" th:field="*{activity.avtName}" class="form-control" required/>
+                <input type="text" th:field="*{activity.avtName}" class="form-control" maxlength="30" required/>
               </div>
             </div>
 
@@ -86,7 +85,7 @@
                 <font color='red'>*</font>&nbsp;集合時間：
               </label>
               <div class="col-sm-9">
-                <input type="datetime-local" class="form-control " th:field="*{avtGatDate}" required/>
+                <input type="datetime-local" class="form-control " th:field="*{avtGatDate}"  required/>
               </div>
             </div>
 
@@ -95,7 +94,7 @@
                 <font color='red'>*</font>&nbsp;集合地點:
               </label>
               <div class="col-sm-9">
-                <input type="text" class="form-control" th:field="*{activity.avtLoc}" required/>
+                <input type="text" class="form-control" th:field="*{activity.avtLoc}" maxlength="50" required/>
               </div>
             </div>
 
@@ -124,15 +123,11 @@
 
             <div class="form-group">
               <label class="control-label col-sm-4">
-                &nbsp;活動名額(上限/下限):
+                &nbsp;活動名額(下限/上限):
               </label>
-              <div class="col-sm-8" th:if="${activityDTO.activity.avtPre==0}">
-                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtUpp}"/>&nbsp;/&nbsp;
-                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtLow}"/>
-              </div>
-              <div class="col-sm-8" th:if="${activityDTO.activity.avtPre==1}">
-                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtUpp}" readOnly/>&nbsp;/&nbsp;
-                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtLow}" readOnly/>
+              <div class="col-sm-8" >
+                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtLow}"/>&nbsp;/&nbsp;
+                  <input type="number" class="form-control short" min="1" th:field="*{activity.avtUpp}"/>
               </div>
             </div>
             
@@ -175,6 +170,9 @@
               <label class="control-label col-sm-4" for="date">
                 其他需要的報名資料：
               </label>
+            </div>
+            <div class="form-group" th:if="${activityDTO.activity.avtPre==1}">
+              <div class="col-sm-1"></div>
               <div class="col-sm-11">
                 <div id="start_item" th:each="oth,o: *{otherDatas}">
                   <div class="item_data">
@@ -182,7 +180,7 @@
                   </div>
                 </div>
                 <br>
-                <font color='grey'>活動審核通過後，「活動名額」及「其他需要的報名資料」不得修改。</font><br>
+                <font color='grey'>活動審核通過後，「其他需要的報名資料」不得修改。</font><br>
               </div>
             </div>
 
@@ -239,12 +237,12 @@
        function test() {
     	    document.getElementById("activity.avtName").value = "滿月圓步道健行";	
 			document.getElementById("activity.activityType.avtTypeNo").value = '3';
-			document.getElementById("activityDateS").value = "2019-12-14";	
-			document.getElementById("activityDateE").value = "2019-12-14";	
-			document.getElementById("avtGatDate").value = "2019-12-14T06:50";	
+			document.getElementById("activityDateS").value = "2020-05-14";	
+			document.getElementById("activityDateE").value = "2020-05-14";	
+			document.getElementById("avtGatDate").value = "2020-05-14T06:50";	
 			document.getElementById("activity.avtLoc").value = "永寧捷運站4號出口";	
 			document.getElementById("activity.avtPrice").value = "200";	
-			document.getElementById("avtCutDate").value = "2019-12-07";	
+			document.getElementById("avtCutDate").value = "2020-05-07";	
 			document.getElementsByName("enableFriend")[0].checked = true;
 			document.getElementById("needFriendData").style.display = "block";
 			document.getElementsByName("friendData")[0].checked = true;

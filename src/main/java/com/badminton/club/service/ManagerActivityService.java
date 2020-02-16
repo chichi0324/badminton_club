@@ -12,9 +12,16 @@ public interface ManagerActivityService {
 	/**
 	 * 我的活動管理(複合式查詢)
 	 * 取得該管理員主辦的活動及搜尋條件
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
-	public QueryActivityHoldDTO findAllActivityHold(QueryActivityHoldDTO queryDTO, String userNo);
+	public QueryActivityHoldDTO findAllActivityHold(QueryActivityHoldDTO queryDTO, String userNo,int indexPage,int countOnePage);
 	
+	/**
+	 * 依條件搜尋活動審核(複合式查詢)
+	 * 查詢我的活動管理(複合式查詢)總筆數
+	 */
+	public int searchActivityHoldCount(QueryActivityHoldDTO queryDTO, String userNo);
 	/**
 	 * 我的活動管理(複合式查詢) 
 	 * 刪除活動即相關資料(子table和圖片)

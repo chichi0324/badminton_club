@@ -34,6 +34,9 @@ public class FileTool {
 
 		// ======================classes底下==================
 		 return ResourceUtils.getURL("classpath:").getPath()+"static" +path;
+//		 return "C:/Users/GameToGo/Desktop/test/club/static" +path;
+//		 return "C:/Users/GameToGo/Desktop/test/club/static" +path;
+//        return "/home/j43343/jenkins_home/club/static" +path;
 
 	}
 
@@ -59,10 +62,31 @@ public class FileTool {
 		if (theFile.exists()) {
 			System.out.println(resource_prefix(dirPath) + "：已經刪除" + theFile.delete());
 		}
+//		BufferedInputStream brin = new BufferedInputStream(file.getInputStream(), 1024);
+		
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(theFile)); // 上傳檔案位置
+//		byte input[] = new byte[1024];
+//		int count;
+//        while ((count=brin.read(input))!= -1) {
+//        	outputStream.write(input,0,count);
+//        }
 		outputStream.write(file.getBytes());
 		outputStream.flush();
 		outputStream.close();
+		
+		log.info("----------待上傳圖檔:{},若上傳後:{}", file.getOriginalFilename()  , theFile.getName());
+
+
+		//圖檔大於1M，等比例壓縮圖檔
+		if(file.getSize()>1*1024*1024){
+			if("/images/activity/".equals(dirPath)){				
+				ImageZipUtil.zipWidthHeightImageFile(theFile, theFile, 1200, 800, 1f);
+			}else if("/images/member/".equals(dirPath) || "/images/".equals(dirPath)){
+				ImageZipUtil.zipWidthHeightImageFile(theFile, theFile, 1000, 1000, 1f);
+			}
+			
+			log.info("----------圖檔大於1M:{},壓縮成功圖檔:{}", file.getSize(),theFile.getName() );
+		}
 
 	}
 
@@ -74,21 +98,35 @@ public class FileTool {
 		if (oldFile.exists()) {
 			log.info("檔案:{},已經刪除:{}", resource_prefix(filePath), oldFile.delete());
 
-			BufferedOutputStream outputStream = new BufferedOutputStream(
-					new FileOutputStream(new File(resource_prefix(filePath)))); // 上傳檔案位置
-			outputStream.write(file.getBytes());
-			outputStream.flush();
-			outputStream.close();
 		} else {
 			File dir = new File(resource_prefix(dirPath));// "/images/member/"
 			if (!dir.exists()) {
 				dir.mkdir();
 			}
-			BufferedOutputStream outputStream = new BufferedOutputStream(
-					new FileOutputStream(new File(resource_prefix(filePath)))); // 上傳檔案位置
-			outputStream.write(file.getBytes());
-			outputStream.flush();
-			outputStream.close();
+		}
+//		BufferedInputStream brin = new BufferedInputStream(file.getInputStream(), 1024);
+		
+		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(oldFile)); // 上傳檔案位置
+//		byte input[] = new byte[1024];
+//		int count;
+//        while ((count=brin.read(input))!= -1) {
+//        	outputStream.write(input,0,count);
+//        }
+		outputStream.write(file.getBytes());
+		outputStream.flush();
+		outputStream.close();
+		
+		log.info("----------待上傳圖檔:{},若上傳後:{}", file.getOriginalFilename()  , oldFile.getName());
+				
+		//圖檔大於1M，等比例壓縮圖檔
+		if(file.getSize()>1*1024*1024){
+			if("/images/activity/".equals(dirPath)){				
+				ImageZipUtil.zipWidthHeightImageFile(oldFile, oldFile, 1200, 800, 1f);
+			}else if("/images/member/".equals(dirPath) || "/images/".equals(dirPath)){
+				ImageZipUtil.zipWidthHeightImageFile(oldFile, oldFile, 1000, 1000, 1f);
+			}
+			
+			log.info("----------圖檔大於1M:{},壓縮成功圖檔:{}", file.getSize(),oldFile.getName() );
 		}
 
 	}

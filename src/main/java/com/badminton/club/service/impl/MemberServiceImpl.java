@@ -1,7 +1,9 @@
 package com.badminton.club.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.badminton.club.dao.MemberRepository;
 import com.badminton.club.dao.UserRepository;
 import com.badminton.club.dto.MemberDTO;
+import com.badminton.club.dto.QueryActivityCheckDTO;
 import com.badminton.club.dto.QueryActivityDTO;
 import com.badminton.club.entity.Member;
 import com.badminton.club.entity.QSignupAvt;
@@ -21,6 +24,7 @@ import com.badminton.club.service.MemberService;
 import com.badminton.club.tools.BCrypt;
 import com.badminton.club.tools.DateTool;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 /**
  * 社員專區(社員資料修改，我的活動) 服務
@@ -152,12 +156,30 @@ public class MemberServiceImpl implements MemberService {
 			throw e;
 		}
 	}
+	
+	/**
+	 * 會員有參與的活動"signupAvt報名人員清單"(複合式查詢)
+	 * 查詢結果總筆數
+	 */
+	@Override
+	public int searchJoinActivityCount(String userNo, QueryActivityDTO queryActivityDTO) {
+		try {
+			int count=this.searchJoinActivity(userNo,queryActivityDTO,0, 0).size();
+			return count;
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
+		return 0;
+	}
+	
 
 	/**
 	 * 我的活動 會員有參與的活動"signupAvt報名人員清單"(複合式查詢)
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
 	@Override
-	public List<SignupAvt> searchJoinActivity(String userNo, QueryActivityDTO queryActivityDTO) {
+	public List<SignupAvt> searchJoinActivity(String userNo, QueryActivityDTO queryActivityDTO,int indexPage,int countOnePage) {
 		try {
 			String keyWord = queryActivityDTO.getKeyWord();
 			String type = queryActivityDTO.getType();
@@ -186,9 +208,20 @@ public class MemberServiceImpl implements MemberService {
 				}
 				whereSQL = whereSQL.and(signupActivity.activity.avtStat.eq(status));
 			}
-
-			List<SignupAvt> signupAvtQuerys = jpaQueryFactory.selectFrom(signupActivity).from(signupActivity)
-					.where(whereSQL).orderBy(signupActivity.signTime.desc()).fetch();
+			
+			JPAQuery<SignupAvt> jPAQuerys =jpaQueryFactory.selectFrom(signupActivity).from(signupActivity)
+					.where(whereSQL).orderBy(signupActivity.signTime.desc());
+			List<SignupAvt> signupAvtQuerys = new ArrayList<>();
+			if(indexPage==0 && countOnePage==0){ //無分頁
+				signupAvtQuerys = jPAQuerys.fetch();
+			}else{  //有分頁
+				if(indexPage>=1){
+					indexPage=indexPage-1;
+				}
+				signupAvtQuerys=jPAQuerys.offset(indexPage*5).limit(countOnePage).fetch();
+			}
+			
+			
 			
 			log.info("keyWord:{}, type:{}, status:{}", keyWord, type ,status);
 

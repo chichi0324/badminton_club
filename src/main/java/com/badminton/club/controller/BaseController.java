@@ -1,5 +1,6 @@
 package com.badminton.club.controller;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 
 import com.badminton.club.dto.BreadDTO;
-import com.badminton.club.dto.FooterDTO;
 import com.badminton.club.dto.MemberDTO;
 import com.badminton.club.entity.Activity;
 import com.badminton.club.entity.AvtPreview;
@@ -53,6 +53,13 @@ public class BaseController {
 		theModel.addAttribute("activitieTypes", basicService.getAllActivityType());
 
 	}
+	
+	/**
+	 * 取得所有管理員(下拉式選單用)
+	 */
+	public void getAllManager(Model theModel) {
+		theModel.addAttribute("allManager", basicService.getAllManager());
+	}
 
 	/**
 	 * 取得目前會員帳號
@@ -69,6 +76,22 @@ public class BaseController {
 
 		MemberDTO memberDTO = this.memberService.findMemberData(getUserId());
 		return memberDTO;
+	}
+	
+	/**
+	 * 分頁(當前頁,總頁數)
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
+	 * totalCount:查詢出來總筆數
+	 */
+	public void getPage(int indexPage,int countOnePage,int totalCount,Model theModel) {
+		
+		BigDecimal b1 = new BigDecimal(totalCount);
+	    BigDecimal b2 = new BigDecimal(countOnePage);
+	    int totalPage = ((b1.divide(b2,0,BigDecimal.ROUND_UP)).toBigInteger()).intValue();
+		
+		theModel.addAttribute("indexPage", indexPage);
+		theModel.addAttribute("totalPage", totalPage);
 	}
 	
 	/**

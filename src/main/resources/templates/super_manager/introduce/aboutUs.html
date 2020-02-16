@@ -37,22 +37,34 @@
 		<!--功能及麵包屑==========================================-->
 		<div th:replace="fuctionList::fuctionList"></div>
 		<div th:replace="breadcrumb::breadcrumb"></div>
-		
-		<form class="form-horizontal" th:action="@{/superManager/clubEdit/aboutUs/save}"
-			method="post" th:object="${theSystem}">
-			
-			<input type="hidden" th:field="*{sysNo}" />
-			<input type="hidden" th:field="*{sysName}" />
-			
+
+		<form class="form-horizontal"
+			th:action="@{/superManager/clubEdit/aboutUs/save}" method="post"
+			th:object="${theSystem}">
+
+			<input type="hidden" th:field="*{sysNo}" /> <input type="hidden"
+				th:field="*{sysName}" />
+
 			<div class="row">
 				<div class="col-md-12 col-sm-12">
 					<div class="function">
 						<h2>關於我們</h2>
-						<textarea class="form-control" rows="5" cols="80" th:field="*{sysCon}"></textarea>
-						<div class="row">
-							<div style="margin-top: 12px; text-align: left;">
-								&nbsp;&nbsp;<button type="submit" class="btn btn-info" >存檔</button>	
-							</div>
+						<textarea class="form-control" rows="5" cols="80"
+							th:field="*{sysCon}"></textarea>
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="function">
+						<h2>youtube網址:</h2>
+						<input type="text" class="form-control " name="inform_email"
+							id="inform_email" th:field="*{sysData}" required />
+					</div>
+				</div>
+				<div class="col-md-12 col-sm-12">
+					<div class="row">
+						<div style="margin-top: 12px; text-align: left;">
+							&nbsp;&nbsp;
+							<button type="submit" class="btn btn-info">存檔</button>
 						</div>
 					</div>
 				</div>
@@ -68,7 +80,7 @@
 	<div th:replace="footer::footer"></div>
 
 
-    <script th:src="@{/js/show_message.js}"></script>
+	<script th:src="@{/js/show_message.js}"></script>
 	<script src="https://code.jquery.com/jquery.js"></script>
 	<script
 		src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>

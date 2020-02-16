@@ -56,11 +56,11 @@
 						th:text="' 活動日期 : '+${theActivity.avtDateS}"></p>
 					<p th:if="${theActivity.avtDateS != theActivity.avtDateE}"
 						th:text="' 活動日期 : '+${theActivity.avtDateS+ '~' +theActivity.avtDateE}"></p>
-					<p th:text="' 集合時間 : '+${#strings.substring(theActivity.avtGatDate,0,19)}"></p>
+					<p th:text="' 集合時間 : '+${#strings.substring(theActivity.avtGatDate,0,16)}"></p>
 					<p th:text="' 集合地點 : '+${theActivity.avtLoc}"></p>
 					<p th:text="' 活動費用 : '+${theActivity.avtPrice}"></p>
 					<p th:text="' 活動截止 : '+${theActivity.avtCutDate}"></p>
-					<p th:text="' 名額(上限/下限) : '+${theActivity.avtUpp}+' / '+${theActivity.avtLow}"></p>
+					<p th:text="' 名額(下限/上限) : '+${theActivity.avtLow}+' / '+${theActivity.avtUpp}"></p>
 					<p th:text="' 活動主辦人 : '+${theActivity.member.memName}"></p>
 					<p th:text="' 活動主辦人聯絡電話 : '+${theActivity.member.memPhone}"></p>
 					
@@ -92,7 +92,7 @@
 				</div>
 			</div>
 
-			<div class="row">
+			<div class="row" th:if='${theActivity.avtMemo!=null && !"".equals(theActivity.avtMemo.trim())}'>
 				<div class="col-md-12 col-sm-12">
 					<h3>備註:</h3>
 				</div>
@@ -104,12 +104,12 @@
 
 		<div class="avt_detail" th:if="${advocateSize > 0}">
 			<div class="row">
-				<div class="col-md-2 col-xs-2">
+				<div class="col-md-2 col-xs-12">
 					<h3>活動宣傳:</h3>
-					<br> <img th:src="@{/images/horn.jpg}" alt=""
-						width="100%">
+					<br class="avt_detail_littleman"> <img th:src="@{/images/horn.jpg}" alt=""
+						width="100%" class="avt_detail_littleman">
 				</div>
-				<div class="col-md-8 col-xs-10">
+				<div class="col-md-8 col-xs-12">
 					<div class="mySlides" th:each="advocate,adoStat: ${theActivity.advocates}">
 						<div class="numbertext" th:text="${adoStat.index+1 +' / '+adoStat.size}"></div>
 						<img th:src="@{(${advocate.advImg})}" style="width: 97%">
@@ -207,16 +207,16 @@
 					<h3>回饋心得:</h3>
 					<br>
 				</div>
-				<div class="row message_member" th:if="${focus == 'activity' || focus == 'member'}">
-					<div class="col-md-1 col-sm-4" th:if="${theMember.memImg}">
+				<div class="row message_member" th:if="${focus == 'activity' || focus == 'member'}" sec:authorize="hasRole('MEMBER')">
+					<div class="col-md-1 col-xs-4" th:if="${theMember.memImg}">
 						<img th:src="@{(${theMember.memImg})}" class="face_message">
 					</div>
-					<div class="col-md-1 col-sm-4" th:if="not${theMember.memImg}"  th:switch="${theMember.memGen}">
+					<div class="col-md-1 col-xs-4" th:if="not${theMember.memImg}"  th:switch="${theMember.memGen}">
 						<img th:case="W" th:src="@{/images/face2.jpeg}" class="face_message">
 						<img th:case="M" th:src="@{/images/face3.jpeg}" class="face_message">
 					</div>
 					<form class="form-horizontal" th:action="@{/activity/search/detail/saveMessage}" method="post" th:object="${theMessage}">
-					<div class="col-md-11 col-sm-8">
+					<div class="col-md-11 col-xs-8">
 						<div class="col-md-12 col-sm-12" style="display: inline-block;">
 							<div class="starts">
 								<div id="pingStar" th:if="${theMessage.starCount ==0 }">
@@ -264,7 +264,7 @@
 								<input type="hidden" name="star_count" th:field="*{starCount}" id="startP">
 							</div>
 						</div>
-						<div class="col-md-12 col-sm-12">						   
+						<div class="col-md-12 col-xs-12">						   
 							<div>
 								<textarea class="form-control" name="message" placeholder="想說的話..." rows="5" 
 								style="word-wrap: break-word;word-break: break-all;" th:field="*{message}"></textarea>
@@ -282,16 +282,16 @@
 				<!-- ---------------------回饋心得區---------------------- -->
 				<div th:each="message: ${theActivity.avtMessages}">
 				<div class="row message_member">
-					<div class="col-md-1 col-sm-4" th:if="${message.member.memImg}">
+					<div class="col-md-1 col-xs-4" th:if="${message.member.memImg}">
 					    <img th:src="@{(${message.member.memImg})}" class="face_message">
 					</div>
-					<div class="col-md-1 col-sm-4" th:if="not${message.member.memImg}"  th:switch="${message.member.memGen}">
+					<div class="col-md-1 col-xs-4" th:if="not${message.member.memImg}"  th:switch="${message.member.memGen}">
 						<img th:case="W" th:src="@{/images/face2.jpeg}" class="face_message">
 						<img th:case="M" th:src="@{/images/face3.jpeg}" class="face_message">
 					</div>
-					<div class="col-md-11 col-sm-8 border-bottom">
+					<div class="col-md-11 col-xs-8 border-bottom">
 						<div class="col-md-12 col-sm-12" style="display: inline-block;" th:switch="${message.msgStar}">
-							<h4 th:text="${message.member.memName+' '+message.member.memUser}"></h4>
+							<h4 th:text="${message.member.memName}"></h4>
 							<label th:case="1" style="color: orange;">★</label>
 							<label th:case="2" style="color: orange;">★★</label>
 							<label th:case="3" style="color: orange;">★★★</label>
@@ -300,7 +300,7 @@
 							<label th:case="*" style="color: orange;"></label>
 						</div>
 						
-						<div class="col-md-12 col-sm-12">
+						<div class="col-md-12 col-xs-12">
 							<div class="avt_message">
 							   <pre th:text="${message.msgCon}" class="avt_message_pre"></pre>
 							</div>

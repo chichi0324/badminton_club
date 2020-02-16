@@ -71,8 +71,9 @@ public class LoginController extends BaseController{
 			List<String> mistakes =this.verify(user,theUser);
 			
 			if(CollectionUtils.isEmpty(mistakes)){
-				registerService.sendMailPassword(theUser);
-				this.showMessage(theModel, "密碼已傳送至您的信箱","notice");
+//				registerService.sendMailPassword(theUser);
+				registerService.getIdCardForPassword(theUser);
+				this.showMessage(theModel, "密碼為您的身分證後六碼","notice");
 				return "login/login";
 			}else{			
 				this.showMessage(theModel,mistakes,"error");

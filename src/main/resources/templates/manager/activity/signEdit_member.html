@@ -96,29 +96,29 @@
                 </form>
             </td>
             <td data-th="會員帳號">
-                <p th:text="${memberDTO.member.memUser}"></p>
+                <span th:text="${memberDTO.member.memUser}"></span>
             </td>
             <td data-th="姓名">
-                <p th:text="${memberDTO.member.memName}"></p>
+                <span th:text="${memberDTO.member.memName}"></span>
             </td>
             <td data-th="性別">
-                <p th:if="${memberDTO.member.memGen=='M'}">男</p>
-                <p th:if="${memberDTO.member.memGen=='W'}">女</p>
+                <span th:if="${memberDTO.member.memGen=='M'}">男</span>
+                <span th:if="${memberDTO.member.memGen=='W'}">女</span>
             </td>
             <td data-th="生日">
-                <p th:text="${memberDTO.member.memBirth}"></p>
+                <span th:text="${memberDTO.member.memBirth}"></span>
             </td>
             <td data-th="身分證">
-                <p th:text="${memberDTO.member.memIdn}"></p>
+                <span th:text="${memberDTO.member.memIdn}"></span>
             </td>
             <td data-th="手機號碼">
-                <p th:text="${memberDTO.member.memPhone}"></p>
+                <span th:text="${memberDTO.member.memPhone}"></span>
             </td>
             <td data-th="Email">
-                <p th:text="${memberDTO.member.memMail}"></p>
+                <span th:text="${memberDTO.member.memMail}"></span>
             </td>
             <td data-th="地址">
-                <p th:text="${memberDTO.member.memAddr}"></p>
+                <span th:text="${memberDTO.member.memAddr}"></span>
             </td>            
           </tr>
         </table>

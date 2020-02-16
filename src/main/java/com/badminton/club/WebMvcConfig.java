@@ -1,7 +1,9 @@
 package com.badminton.club;
 
 import javax.persistence.EntityManager;
+import javax.servlet.MultipartConfigElement;
 
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -17,5 +19,4 @@ public class WebMvcConfig implements WebMvcConfigurer{
     public JPAQueryFactory jpaQuery(EntityManager entityManager) {
         return new JPAQueryFactory(entityManager);
     }
-	
 }

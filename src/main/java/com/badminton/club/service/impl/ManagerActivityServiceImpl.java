@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -21,6 +22,7 @@ import com.badminton.club.dao.AdvocateRepository;
 import com.badminton.club.dao.OtherDataAnRepository;
 import com.badminton.club.dao.OtherDataRepository;
 import com.badminton.club.dto.ActivityDTO;
+import com.badminton.club.dto.QueryActivityCheckDTO;
 import com.badminton.club.dto.QueryActivityHoldDTO;
 import com.badminton.club.entity.Activity;
 import com.badminton.club.entity.ActivityType;
@@ -33,6 +35,7 @@ import com.badminton.club.service.ManagerActivityService;
 import com.badminton.club.tools.DateTool;
 import com.badminton.club.tools.FileTool;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /**
@@ -66,12 +69,31 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 		this.otherDataAnRepository = otherDataAnRepository;
 		this.jpaQueryFactory = jpaQueryFactory;
 	}
+	
+	/**
+	 * 依條件搜尋活動審核(複合式查詢)
+	 * 查詢我的活動管理(複合式查詢)總筆數
+	 */
+	@Override
+	public int searchActivityHoldCount(QueryActivityHoldDTO queryDTO, String userNo) {
+		try {
+			QueryActivityHoldDTO queryCountDTO = new QueryActivityHoldDTO();
+			BeanUtils.copyProperties(queryCountDTO, queryDTO);
+			int count=this.findAllActivityHold(queryCountDTO, userNo,0, 0).getActivityDTOs().size();
+			return count;
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
+		return 0;
+	}
 
 	/**
 	 * 我的活動管理(複合式查詢) 取得該管理員主辦的活動及搜尋條件
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
 	@Override
-	public QueryActivityHoldDTO findAllActivityHold(QueryActivityHoldDTO queryDTO, String userNo) {
+	public QueryActivityHoldDTO findAllActivityHold(QueryActivityHoldDTO queryDTO, String userNo,int indexPage,int countOnePage) {
 		try {
 			String keyWord = queryDTO.getKeyWord();
 			String type = queryDTO.getType();
@@ -128,10 +150,18 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 				}
 
 			}
+			JPAQuery<Activity> jPAQuerys =jpaQueryFactory.selectFrom(theActivity).from(theActivity).where(whereSQL)
+					.orderBy(theActivity.avtDateS.desc());
 
-			List<Activity> activities = jpaQueryFactory.selectFrom(theActivity).from(theActivity).where(whereSQL)
-					.orderBy(theActivity.avtDateS.desc()).fetch();
-			
+			List<Activity> activities = new ArrayList<>();
+			if(indexPage==0 && countOnePage==0){ //無分頁
+				activities = jPAQuerys.fetch();
+			}else{  //有分頁
+				if(indexPage>=1){
+					indexPage=indexPage-1;
+				}
+				activities=jPAQuerys.offset(indexPage*7).limit(countOnePage).fetch();
+			}
 			log.info("keyWord:{}, type:{}, checkStatus:{}, signUpStatus:{}", keyWord, type, checkStatus,signUpStatus);
 
 
@@ -310,13 +340,13 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 				activity.setAvtStat("報名中");
 			}
 			
+			activity.setAvtUpp(PreviousActivityDTO.getActivity().getAvtUpp());
+			activity.setAvtLow(PreviousActivityDTO.getActivity().getAvtLow());
+			
 			//新增/修改  舊活動
 			this.setOldActivity(activity);
 
 			if ("新增活動".equals(PreviousActivityDTO.getAddOrEdit())) {
-
-				activity.setAvtUpp(PreviousActivityDTO.getActivity().getAvtUpp());
-				activity.setAvtLow(PreviousActivityDTO.getActivity().getAvtLow());
 
 				this.activityRepository.save(activity);
 
@@ -340,8 +370,6 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 				
 				// 未審核通過可以修改
 				if (activity.getAvtPre() == (byte) 0) {
-					activity.setAvtUpp(PreviousActivityDTO.getActivity().getAvtUpp());
-					activity.setAvtLow(PreviousActivityDTO.getActivity().getAvtLow());
 
 					PreviousActivityDTO.setActivity(activity);
 					// 報名其他資料
@@ -353,6 +381,13 @@ public class ManagerActivityServiceImpl implements ManagerActivityService {
 
 				// 活動宣傳圖片
 				this.saveActivityAdvocate(PreviousActivityDTO, username);
+				
+				//修改時，更新活動狀態
+				if("修改活動".equals(PreviousActivityDTO.getAddOrEdit())){
+					List<OtherData> otherDatas=this.OtherDataRepository.findAllOtherDataActivity(activity.getAvtNo());
+					activity.setOtherData(otherDatas);
+					this.basicService.updateActivityStatus(activity);
+				}
 			}
 
 			return PreviousActivityDTO.getActivity().getAvtNo();

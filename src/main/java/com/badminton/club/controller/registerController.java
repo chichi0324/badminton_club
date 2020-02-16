@@ -128,11 +128,12 @@ public class registerController extends BaseController{
 		if (StringUtils.isBlank(dto.getUser().getUsername())) {
 			mistakes.add("請輸入帳號");
 		} else {
-			if (dto.getUser().getUsername().trim().length() != 6) {
-				mistakes.add("帳號需為6碼");
+			if (!(dto.getUser().getUsername().trim().length() >= 6 && dto.getUser().getUsername().trim().length()<=10)) {
+				mistakes.add("帳號需為6~10碼");
 			}
-			if (!dto.getUser().getUsername().trim().matches("[a-zA-Z0-9]{6}")) {
-				mistakes.add("帳號必須包含英文和數字");
+			if ((dto.getUser().getUsername().trim().length() >= 6 && dto.getUser().getUsername().trim().length()<=10) && 
+					!dto.getUser().getUsername().trim().matches("[a-zA-Z0-9]{6,10}")) {
+				mistakes.add("帳號必須包含英文或數字");
 			}
 			User user = basicService.findUser(dto.getUser().getUsername());
 			if (user != null) {
@@ -144,24 +145,26 @@ public class registerController extends BaseController{
 		if (StringUtils.isBlank(dto.getUser().getPassword())) {
 			mistakes.add("請輸入密碼");
 		} else {
-			if (dto.getUser().getPassword().trim().length() != 6) {
-				mistakes.add("密碼需為6碼");
+			if (!(dto.getUser().getPassword().trim().length() >= 6 && dto.getUser().getPassword().trim().length()<=10)) {
+				mistakes.add("密碼需為6~10碼");
 			}
-			if (!dto.getUser().getPassword().trim().matches("[a-zA-Z0-9]{6}")) {
-				mistakes.add("密碼必須包含英文和數字");
+			if ((dto.getUser().getPassword().trim().length() >= 6 && dto.getUser().getPassword().trim().length()<=10) && 
+					!dto.getUser().getPassword().trim().matches("[a-zA-Z0-9]{6,10}")) {
+				mistakes.add("密碼必須包含英文或數字");
 			}
 		}
 		// 確認密碼
 		if (StringUtils.isBlank(dto.getCkeckPwd())) {
 			mistakes.add("請輸入確認密碼");
 		} else {
-			if (dto.getCkeckPwd().trim().length() != 6) {
-				mistakes.add("確認密碼需為6碼");
+			if (!(dto.getCkeckPwd().trim().length() >= 6 && dto.getCkeckPwd().trim().length()<=10)) {
+				mistakes.add("確認密碼需為6~10碼");
 			}
-			if (!dto.getCkeckPwd().equals(dto.getCkeckPwd())) {
+			if ((dto.getCkeckPwd().trim().length() >= 6 && dto.getCkeckPwd().trim().length()<=10) && 
+					!dto.getCkeckPwd().equals(dto.getUser().getPassword())) {
 				mistakes.add("密碼和確認密碼不一致");
 			}
-			if (!dto.getCkeckPwd().trim().matches("[a-zA-Z0-9]{6}")) {
+			if (!dto.getCkeckPwd().trim().matches("[a-zA-Z0-9]{6,10}")) {
 				mistakes.add("確認密碼必須包含英文和數字");
 			}
 		}
@@ -172,6 +175,10 @@ public class registerController extends BaseController{
 		// 身份證字號
 		if (StringUtils.isBlank(dto.getMember().getMemIdn())) {
 			mistakes.add("請輸入身份證字號");
+		}else{
+			if(dto.getMember().getMemIdn().length()!=10){
+				mistakes.add("身份證字號為10碼");
+			}
 		}
 		// 手機號碼
 		if (StringUtils.isBlank(dto.getMember().getMemPhone())) {

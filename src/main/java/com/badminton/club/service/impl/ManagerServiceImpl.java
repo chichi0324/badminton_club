@@ -7,7 +7,9 @@ import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -18,11 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.badminton.club.dao.ActivityRepository;
 import com.badminton.club.dao.AvtPreviewRepository;
+import com.badminton.club.dao.MemberRepository;
 import com.badminton.club.dao.SystemRepository;
 import com.badminton.club.dao.UserRepository;
 import com.badminton.club.dto.ActivityDTO;
 import com.badminton.club.dto.MemberDTO;
 import com.badminton.club.dto.QueryActivityCheckDTO;
+import com.badminton.club.dto.QueryActivityDTO;
 import com.badminton.club.dto.QueryMemberQualifyDTO;
 import com.badminton.club.entity.Activity;
 import com.badminton.club.entity.Authority;
@@ -33,6 +37,7 @@ import com.badminton.club.entity.QAuthority;
 import com.badminton.club.entity.QAvtPreview;
 import com.badminton.club.entity.QMember;
 import com.badminton.club.entity.QUser;
+import com.badminton.club.entity.SignupAvt;
 import com.badminton.club.entity.System;
 import com.badminton.club.entity.User;
 import com.badminton.club.service.BasicService;
@@ -42,6 +47,7 @@ import com.badminton.club.tools.FileTool;
 import com.badminton.club.tools.MailTool;
 import com.opencsv.CSVWriter;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 /**
  * 活動管理(活動審核，社員管理) 服務
@@ -53,6 +59,7 @@ public class ManagerServiceImpl implements ManagerService {
 
 	private BasicService basicService;
 	
+	private MemberRepository memberRepository;
 	private UserRepository userRepository;
 
 	private ActivityRepository activityRepository;
@@ -61,26 +68,49 @@ public class ManagerServiceImpl implements ManagerService {
 	private JPAQueryFactory jpaQueryFactory;
 
 	@Autowired
-	public ManagerServiceImpl(BasicService basicService, UserRepository userRepository,
-			ActivityRepository activityRepository, AvtPreviewRepository avtPreviewRepository,
-			SystemRepository systemRepository, JPAQueryFactory jpaQueryFactory) {
+	public ManagerServiceImpl(BasicService basicService, MemberRepository memberRepository,
+			UserRepository userRepository, ActivityRepository activityRepository,
+			AvtPreviewRepository avtPreviewRepository, SystemRepository systemRepository,
+			JPAQueryFactory jpaQueryFactory) {
+		super();
 		this.basicService = basicService;
+		this.memberRepository = memberRepository;
 		this.userRepository = userRepository;
 		this.activityRepository = activityRepository;
 		this.avtPreviewRepository = avtPreviewRepository;
 		this.systemRepository = systemRepository;
 		this.jpaQueryFactory = jpaQueryFactory;
 	}
+	
+	/**
+	 * 會員審核(複合式查詢) 取得會員及搜尋條件
+	 * 查詢結果總筆數
+	 */
+	@Override
+	public int searchMemberAllCount(QueryMemberQualifyDTO queryDTO) {
+		try {
+			QueryMemberQualifyDTO queryCountDTO = new QueryMemberQualifyDTO();
+			BeanUtils.copyProperties(queryCountDTO, queryDTO);
+			int count=this.findMemberAllData(queryCountDTO,0, 0).getMemberDTOs().size();
+			return count;
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
+		return 0;
+	}
 
 	/**
 	 * 會員審核(複合式查詢) 取得會員及搜尋條件
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
 	@Override
-	public QueryMemberQualifyDTO findMemberAllData(QueryMemberQualifyDTO queryDTO) {
+	public QueryMemberQualifyDTO findMemberAllData(QueryMemberQualifyDTO queryDTO,int indexPage,int countOnePage) {
 		try {
 			String keyWord = queryDTO.getKeyWord();
 			String status = queryDTO.getStatus();
 
+			JPAQuery<Member> jPAQuerys=new JPAQuery<>();
 			List<Member> members = new ArrayList<>();
 			QMember theMember = QMember.member;
 
@@ -98,11 +128,18 @@ public class ManagerServiceImpl implements ManagerService {
 						: whereSQL.and(theMember.memUser.in(userIds));
 			}
 			if (whereSQL == null) {
-				members = jpaQueryFactory.selectFrom(theMember).from(theMember).orderBy(theMember.memTime.desc())
-						.fetch();
+				jPAQuerys = jpaQueryFactory.selectFrom(theMember).from(theMember).orderBy(theMember.memTime.desc());
 			} else {
-				members = jpaQueryFactory.selectFrom(theMember).from(theMember).where(whereSQL)
-						.orderBy(theMember.memTime.desc()).fetch();
+				jPAQuerys = jpaQueryFactory.selectFrom(theMember).from(theMember).where(whereSQL).orderBy(theMember.memTime.desc());
+			}
+			
+			if(indexPage==0 && countOnePage==0){ //無分頁
+				members = jPAQuerys.fetch();
+			}else{  //有分頁
+				if(indexPage>=1){
+					indexPage=indexPage-1;
+				}
+				members=jPAQuerys.offset(indexPage*7).limit(countOnePage).fetch();
 			}
 			log.info("keyWord:{}, status:{}", keyWord, status,members==null ? null :members.size());
 
@@ -128,7 +165,6 @@ public class ManagerServiceImpl implements ManagerService {
 			throw e;
 		}
 	}
-
 
 
 	/**
@@ -157,14 +193,36 @@ public class ManagerServiceImpl implements ManagerService {
 			throw e;
 		}
 	}
+	
+	/**
+	 * 刪除會員
+	 */
+	@Override
+	@Transactional
+	public void deleteMember(String userId) {
+		try {
+			Optional<Member> memberResult = this.memberRepository.findById(userId);
+			Member member = memberResult.isPresent() ? memberResult.get() : null;
+			
+			this.memberRepository.deleteById(userId);
+			this.userRepository.deleteById(userId);
+			
+			// 刪除會員大頭貼
+			FileTool.deleteFile(member.getMemImg());
+			
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			throw e;
+		}
+	}
 
 	/**
 	 * 匯出(依搜尋條件)會員CSV
 	 */
 	@Override
-	public QueryMemberQualifyDTO generateCSV(QueryMemberQualifyDTO dto) throws IOException {
+	public QueryMemberQualifyDTO generateMemberCSV(QueryMemberQualifyDTO dto) throws IOException {
 		try {
-			dto = this.findMemberAllData(dto);
+			dto = this.findMemberAllData(dto,0,0);
 
 			File dir = new File(FileTool.resource_prefix("/images/manager/"));
 			if (!dir.exists()) {
@@ -206,12 +264,31 @@ public class ManagerServiceImpl implements ManagerService {
 			throw e;
 		}
 	}
+	
+	/**
+	 * 依條件搜尋活動審核(複合式查詢)
+	 * 查詢結果總筆數
+	 */
+	@Override
+	public int searchCheckCount(QueryActivityCheckDTO queryDTO, String userNo) {
+		try {
+			QueryActivityCheckDTO queryCountDTO = new QueryActivityCheckDTO();
+			BeanUtils.copyProperties(queryCountDTO, queryDTO);
+			int count=this.findActivityAllData(queryCountDTO, userNo,0, 0).getActivityDTOs().size();
+			return count;
+		} catch (Exception e) {
+				e.printStackTrace();
+		}
+		return 0;
+	}
 
 	/**
 	 * 活動審核(複合式查詢) 取得活動及搜尋條件
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
 	@Override
-	public QueryActivityCheckDTO findActivityAllData(QueryActivityCheckDTO queryDTO, String userNo) {
+	public QueryActivityCheckDTO findActivityAllData(QueryActivityCheckDTO queryDTO, String userNo,int indexPage,int countOnePage) {
 		try {
 			String keyWord = queryDTO.getKeyWord();
 			String statusPass = queryDTO.getStatusPass();
@@ -234,9 +311,16 @@ public class ManagerServiceImpl implements ManagerService {
 			if (!StringUtils.isBlank(holder)) {
 				whereSQL = whereSQL.and(theActivity.member.memUser.eq(holder));
 			}
-
-			activities = jpaQueryFactory.selectFrom(theActivity).from(theActivity).where(whereSQL)
-					.orderBy(theActivity.avtDateS.desc()).fetch();
+			JPAQuery<Activity> jPAQuerys =jpaQueryFactory.selectFrom(theActivity).from(theActivity).where(whereSQL).orderBy(theActivity.avtDateS.desc());
+			if(indexPage==0 && countOnePage==0){ //無分頁
+				activities = jPAQuerys.fetch();
+			}else{  //有分頁
+				if(indexPage>=1){
+					indexPage=indexPage-1;
+				}
+				activities=jPAQuerys.offset(indexPage*7).limit(countOnePage).fetch();
+			}
+			
 			
 			log.info("keyWord:{}, statusPass:{}, holder:{}, results:{}", keyWord, statusPass ,holder,activities==null ? null :activities.size());
 
@@ -262,6 +346,7 @@ public class ManagerServiceImpl implements ManagerService {
 			throw e;
 		}
 	}
+	
 
 	/**
 	 * 活動審核， 管理員在該活動已審核通過。
@@ -388,6 +473,74 @@ public class ManagerServiceImpl implements ManagerService {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+
+	/**
+	 * 匯出(依搜尋條件)活動審核CSV
+	 */
+	@Override
+	public QueryActivityCheckDTO generateCheckCSV(QueryActivityCheckDTO dto, String userNo) throws IOException {	
+		
+
+		try {
+			dto=this.findActivityAllData(dto, userNo,0,0);
+
+			File dir = new File(FileTool.resource_prefix("/images/manager/"));
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			dir = new File(FileTool.resource_prefix("/images/manager/check/"));
+			if (!dir.exists()) {
+				dir.mkdir();
+			}
+			File file = new File(dir, "活動審核清冊.csv");
+			if (!file.exists()) {
+				file.createNewFile();
+				log.info("產生csv:{}", file.getName());
+			}
+
+			Writer writer = new FileWriter(file);
+			CSVWriter csvWriter = new CSVWriter(writer);
+			String[] strs = { "活動序號","活動編號", "活動日期", "活動名稱", "活動類型", "活動舉辦人", "您通過的審核", "審核狀態" };
+			csvWriter.writeNext(strs);
+			for(int i=0;i<dto.getActivityDTOs().size();i++){
+				ActivityDTO a=dto.getActivityDTOs().get(i);
+
+				String[] content = new String[8];
+				content[0] = String.valueOf(i+1);
+				content[1] = "ACT_"+a.getActivity().getAvtNo();
+				if(a.getActivity().getAvtDateS().equals(a.getActivity().getAvtDateE())){
+					content[2] = DateTool.dateToString(a.getActivity().getAvtDateS());
+				}else{
+					content[2] = DateTool.dateToString(a.getActivity().getAvtDateS()) +"~" +DateTool.dateToString(a.getActivity().getAvtDateE());;
+				}
+
+				content[3] = a.getActivity().getAvtName();
+				content[4] = a.getActivity().getActivityType().getAvtTypeName();
+				content[5] = a.getActivity().getMember().getMemName();
+				if("yes".equals(a.getOwnActivity())){
+					content[6] = "您是主辦人";
+				}else{
+					if("on".equals(a.getPreviewCheck())){
+						content[6] = "✔";
+					}
+				}
+				if(a.getActivity().getAvtPre()==(byte)1){
+					content[7] = "過半審核通過";
+				}
+				
+				csvWriter.writeNext(content);
+			
+			}
+
+			csvWriter.close();
+
+			return dto;
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			throw e;
+		}
+	
 	}
 
 

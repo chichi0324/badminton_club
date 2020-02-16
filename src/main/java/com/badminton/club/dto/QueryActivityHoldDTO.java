@@ -15,8 +15,25 @@ public class QueryActivityHoldDTO {
 	private String checkStatus;
 	// 依活動狀態
 	private String signUpStatus;
+	//當頁頁數
+	private int page;
 	// 活動搜尋結果列表
 	private List<ActivityDTO> activityDTOs = new ArrayList<>();
+	
+	
+
+	public QueryActivityHoldDTO(String keyWord, String type, String checkStatus, String signUpStatus, int page) {
+		super();
+		this.keyWord = keyWord;
+		this.type = type;
+		this.checkStatus = checkStatus;
+		this.signUpStatus = signUpStatus;
+		this.page = page;
+	}
+
+	public QueryActivityHoldDTO() {
+		super();
+	}
 
 	public String getKeyWord() {
 		return keyWord;
@@ -57,5 +74,15 @@ public class QueryActivityHoldDTO {
 	public void setActivityDTOs(List<ActivityDTO> activityDTOs) {
 		this.activityDTOs = activityDTOs;
 	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+	
+	
 
 }

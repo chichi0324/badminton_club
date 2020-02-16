@@ -65,6 +65,7 @@
 						</select> &nbsp;&nbsp;
 					</div>
 					<div class="col-md-1 col-sm-12">
+					     <input type="hidden" name="page" th:value="1" />
 						<button type="submit" class="btn btn-success">查詢</button>
 					</div>
 					<br>
@@ -99,14 +100,35 @@
 				</div>
 			</div>
 		</div>
+		
 		<!--  查無資料 -->
 		<div class="row" th:if="not${show_search_result}">
-
 			<div class="col-md-12 col-sm-12 " align="center">
 				<label style="color:red;font-style:italic;">查無資料</label>
 			</div>
-
 		</div>
+		
+		<!--  分頁 -->
+		<div class="col-md-12 col-sm-12 " align="center">
+		<ul class="pagination" >
+            <li th:if="${indexPage==1}" th:class="'disabled'" ><a href="#">上一頁</a></li>
+            <li th:if="${indexPage!=1}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-1}}">上一頁</a></li>
+            
+            <li th:if="${indexPage-3 >=1}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-3}}" th:text="${indexPage -3}" >1</a></li>
+            <li th:if="${indexPage-2 >=1}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-2}}" th:text="${indexPage -2}" >1</a></li>
+            <li th:if="${indexPage-1 >=1}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-1}}" th:text="${indexPage -1}" >1</a></li>
+            
+            <li class="active"><a href="#" th:text="${indexPage}" >1</a></li>
+            
+            <li th:if="${indexPage+1 <=totalPage}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+1}}" th:text="${indexPage +1}" >1</a></li>
+            <li th:if="${indexPage+2 <=totalPage}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+2}}" th:text="${indexPage +2}" >1</a></li>
+            <li th:if="${indexPage+3 <=totalPage}" ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+3}}" th:text="${indexPage +3}" >1</a></li>
+
+            <li th:if="${indexPage==totalPage}"  th:class="'disabled'" ><a href="#">下一頁</a></li>
+            <li th:if="${indexPage!=totalPage}"  ><a th:href="@{'/activity/searchBy?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+1}}">下一頁</a></li>
+		</ul><br>
+		</div>
+
 
 	</div>
 

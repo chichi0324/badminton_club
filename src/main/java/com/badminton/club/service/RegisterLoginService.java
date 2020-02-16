@@ -15,4 +15,8 @@ public interface RegisterLoginService {
 	 * 忘記密碼(寄email通知)
 	 */
 	public void sendMailPassword(User user);
+	/**
+	 * 忘記密碼(身分證後六碼)
+	 */
+	public void getIdCardForPassword(User user);
 }

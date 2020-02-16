@@ -64,16 +64,20 @@ public class SuperManagerController extends BaseController{
 	public String clubEditAboutUsSave(Model theModel, @ModelAttribute("theSystem") @Valid System theSystem) {
 		try {
 			
-			this.superManagerService.saveSystem(theSystem);
-			this.showMessage(theModel, "存檔成功", "notice");
-			
-			theModel.addAttribute("theSystem", theSystem);			
+			if(theSystem.getSysData().indexOf("www.youtube.com/watch?v=")==-1){
+				this.showMessage(theModel, "youtube網址格式錯誤", "error");
+				this.clubEditAboutUs(theModel);
+			}else{
+				this.superManagerService.saveSystem(theSystem);
+				this.showMessage(theModel, "存檔成功", "notice");
+				
+				theModel.addAttribute("theSystem", theSystem);			
 
-			this.fuctionList(theModel, "關於我們", new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"),
-					new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
-					new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
-			this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "關於我們");
-			
+				this.fuctionList(theModel, "關於我們", new BreadDTO("聯絡資訊", "/superManager/clubEdit/connect"),
+						new BreadDTO("系統信箱設定", "/superManager/clubEdit/email"),
+						new BreadDTO("line QRCode", "/superManager/clubEdit/qRCode"));
+				this.breadcrumbAndNavbar(theModel, "superManager", "活動最高管理", "社團介紹編輯", "關於我們");
+			}
 			
 			return "super_manager/introduce/aboutUs";
 		} catch (Exception e) {

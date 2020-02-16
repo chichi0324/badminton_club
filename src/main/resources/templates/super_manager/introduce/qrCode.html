@@ -50,9 +50,10 @@
                       style="width: 30%; background-color: #DDDDDD; color: black">我的圖片</button>
                     <button class="btn btn-primary sticker_btn" type="button"
                       style="width: 30%; background-color: #DDDDDD; color: black" onclick="register()">更新圖片</button>
-                    <!-- <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">下載圖片</a> -->
+                    <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">壓縮並下載</a>
                   </div>
                   <font color='grey'>選擇「我的圖片」，裁剪後，點選「更新圖片」。</font><br>
+                  <font color='red'>注意：上傳圖片用Chrome或FireFox(電腦和手機都是)。</font>
                 </div>
               </div>
 
@@ -210,6 +211,12 @@
 				array.push(blobBin.charCodeAt(i));
 			}
 			const file = new Blob([new Uint8Array(array)], { type: 'image/jpg' });
+			
+			var imgSize=file.size;
+			if(imgSize>8*1024*1024){
+	            alert('上傳圖片裁剪後大於8M,請重新剪裁大小或壓縮檔案再重新上傳');
+	            return ;
+	        }  
 
 			// 將file 加至 formData
 			const formData = new FormData()
@@ -224,7 +231,8 @@
 					'X-CSRF-TOKEN': token
 				}
 			}).then(res => res.text())
-				.then(resText => alert('您的大頭貼已成功上傳'))
+		    .catch(error => alert('上傳失敗：'+error))
+			.then(resText => alert('您的大頭貼已成功上傳'))
 
 
 		}

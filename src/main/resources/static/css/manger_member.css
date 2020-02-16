@@ -9,6 +9,10 @@ th{
   background-color: rgb(241, 215, 181);
 }
 
+.sticker{
+	width:60px;
+}
+
 @media (max-width: 736px) {
   .table-rwd{min-width: 100%;}
   /*針對tr去做隱藏*/
@@ -30,7 +34,7 @@ th{
     /*最重要的就是這串*/
     content: attr(data-th) " : ";
     /*最重要的就是這串*/
-    display: inline-block;
+    display: inline;
     text-transform: uppercase;
     font-weight: bold;
       margin-right: 10px;
@@ -39,6 +43,11 @@ th{
   /*當RWD縮小的時候.table-bordered 會有兩條線，所以針對.table-bordered去做修正*/
   .table-rwd.table-bordered td,.table-rwd.table-bordered th,.table-rwd.table-bordered{border:0;}
   
+  .table-rwd.table-bordered td, .table-rwd.table-bordered th, .table-rwd.table-bordered{padding-top:0px;padding-bottom:5px;}
+  
+  td{display: inline;}
+  /* 大頭貼 */
+  .sticker{width:50%;}
 }
 
 

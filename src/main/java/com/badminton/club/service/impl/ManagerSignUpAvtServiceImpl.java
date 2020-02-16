@@ -172,7 +172,7 @@ public class ManagerSignUpAvtServiceImpl implements ManagerSignUpAvtService {
 			if (!dir.exists()) {
 				dir.mkdir();
 			}
-			File file = new File(dir, dto.getActivity().getAvtName() + "報名人員清冊.csv");
+			File file = new File(dir, dto.getActivity().getAvtName().replaceAll(" ", "-").replaceAll("/", "") + "報名人員清冊.csv");
 			if (!file.exists()) {
 				file.createNewFile();
 				log.info("產生csv:{}", file.getName());

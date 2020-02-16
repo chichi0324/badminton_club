@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
@@ -11,7 +12,8 @@
 	<groupId>com.badminton</groupId>
 	<artifactId>club</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>war</packaging>
+	<!-- <packaging>war</packaging> -->
+	<packaging>jar</packaging>
 	<name>club</name>
 	<description>demo project for spring boot</description>
 
@@ -24,13 +26,14 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<!-- spring-boot-starter其中包含了 spring-boot-starter-logging， 該依賴內容就是 Spring
-             Boot 默認的日誌框架 logback。工程中有用 到了Thymeleaf，而Thymeleaf依賴包含了spring-boot-starter -->
+		
+		<!-- spring-boot-starter其中包含了 spring-boot-starter-logging， 該依賴內容就是 Spring 
+			Boot 默認的日誌框架 logback。工程中有用 到了Thymeleaf，而Thymeleaf依賴包含了spring-boot-starter -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		
+
 		<!-- spring boot starters -->
 		<!-- 一個maven dependency的集合，ex:spring-web,spring-webmvc,hibernate-validator,tomcat,json. -->
 		<dependency>
@@ -48,7 +51,7 @@
 			<artifactId>thymeleaf-extras-springsecurity5</artifactId>
 		</dependency>
 
-        <!-- ADD SUPPORT FOR AUTOMATIC RELOADING -->
+		<!-- ADD SUPPORT FOR AUTOMATIC RELOADING -->
 		<!-- 熱部署。自動reload，不需重啟 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -56,24 +59,34 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- ADD SUPPORT FOR SPRING BOOT ACTUATOR -->
 		<!-- 監控端點用 -->
-		<!-- <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-actuator</artifactId>
+		<!-- <dependency> 
+		    <groupId>org.springframework.boot</groupId> 
+		    <artifactId>spring-boot-starter-actuator</artifactId> 
 		</dependency> -->
+
+        <!-- 內嵌資料庫 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>runtime</scope>
+        </dependency>
 		
-		<dependency>
+		<!-- MySql -->
+		<!-- <dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency> -->
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -115,7 +128,6 @@
 			<version>3.8.1</version>
 		</dependency>
 
-
 	</dependencies>
 
 	<build>
@@ -123,23 +135,30 @@
 			<!-- 預設 -->
 			<!-- 用於打包及執行 -->
 			<!-- ./mvnw package -->
-			<!-- ./mvnw spring-boot:run -->
+			<!-- ./mvnw spring-boot:run -->			
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<!-- 執行package時改執行repackage goal -->
+				<executions>				
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 
 
 			<!-- jvmArguments配置 使用debug模式 -->
-			<!-- <plugin>
+			<!-- fork : 如果沒有該項配置，肯呢個devtools不會起作用，即應用不會restart這個要手動加進去 -->
+			<!--<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<version>1.5.6.RELEASE</version>
-				<configuration>
-					fork : 如果沒有該項配置，肯呢個devtools不會起作用，即應用不會restart 這個要手動加進去
+				<configuration>					
 					<fork>true</fork>
-					<jvmArguments>
-						-Xdebug
+					<jvmArguments> -Xdebug
 						-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5005
 					</jvmArguments>
 				</configuration>
@@ -163,8 +182,27 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>-->
+			</plugin> -->
+
 		</plugins>
+
+        <!-- 打包時，resourecs部分 -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<!-- 不包含static目錄 -->
+				<excludes>
+					<exclude>static</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>src/main/java</directory>
+				<!-- 包含目錄以及子目錄下所有资源 -->
+				<includes>
+					<include>**/*.*</include>
+				</includes>
+			</resource>
+		</resources>
 	</build>
 
 </project>

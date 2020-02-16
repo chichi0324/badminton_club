@@ -73,10 +73,10 @@
 						</tr>
 						<tr th:each="typeDTO, t: ${queryDTO.activityTypes}">
 							<td data-th="活動類型編號">
-							    <p th:text="${typeDTO.avtTypeNo}"></p>
+							    <span th:text="${typeDTO.avtTypeNo}"></span>
 							</td>
 							<td data-th="活動類型名稱">
-							    <p th:text="${typeDTO.avtTypeName}"></p>
+							    <span th:text="${typeDTO.avtTypeName}"></span>
 							</td>
 							<td data-th="功能">
                                 <form method="post" th:action="@{/superManager/activityType/modify}" style="display:inline;">

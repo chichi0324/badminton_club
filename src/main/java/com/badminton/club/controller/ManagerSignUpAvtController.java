@@ -10,11 +10,7 @@ import javax.validation.Valid;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,15 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.badminton.club.dto.BreadDTO;
-import com.badminton.club.dto.FooterDTO;
 import com.badminton.club.dto.QueryActivitySignDTO;
 import com.badminton.club.dto.QueryMemberQualifyDTO;
 import com.badminton.club.dto.SignAvtDTO;
 import com.badminton.club.entity.Activity;
-import com.badminton.club.entity.AvtPreview;
 import com.badminton.club.entity.SignupAvt;
 import com.badminton.club.entity.User;
-import com.badminton.club.service.ActivityService;
 import com.badminton.club.service.BasicService;
 import com.badminton.club.service.ManagerService;
 import com.badminton.club.service.ManagerSignUpAvtService;
@@ -80,12 +73,10 @@ public class ManagerSignUpAvtController  extends BaseController{
 			
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
-							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(queryDTO.getActivity().getAvtName(), //
-							"/manager/activityManagement/search/detail?activityId="
-									+ queryDTO.getActivity().getAvtNo()),
-					"報名人員清冊");//
+					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview"): new BreadDTO("我的活動管理", "/manager/activityManagement"), //
+					queryDTO.getCheck() == 1 ? new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+									       : new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+					,"報名人員清冊");//
 
 
 
@@ -121,11 +112,10 @@ public class ManagerSignUpAvtController  extends BaseController{
 			
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
+					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview")
 							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(queryDTO.getActivity().getAvtName(), //
-							"/manager/activityManagement/search/detail?activityId="
-									+ queryDTO.getActivity().getAvtNo()),
+					queryDTO.getCheck() == 1 ? new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+							: new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ queryDTO.getActivity().getAvtNo()),
 					"報名人員清冊");//
 			
 
@@ -157,7 +147,7 @@ public class ManagerSignUpAvtController  extends BaseController{
 
 		try {
 			queryDTO = this.managerSignUpAvtService.generateSignAvtCSV(queryDTO);
-			FileTool.downLoadFile(request, response, FileTool.resource_prefix("/images/manager/activity"),queryDTO.getActivity().getAvtName() + "報名人員清冊.csv");
+			FileTool.downLoadFile(request, response, FileTool.resource_prefix("/images/manager/activity"),queryDTO.getActivity().getAvtName().replaceAll(" ", "-").replaceAll("/", "") + "報名人員清冊.csv");
 
 			this.activityManagementDetailSidnUpDataSearch(queryDTO, theModel);
 
@@ -187,11 +177,10 @@ public class ManagerSignUpAvtController  extends BaseController{
 			theModel.addAttribute("queryDTO", queryDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
+					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview")
 							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(queryDTO.getActivity().getAvtName(),
-							"/manager/activityManagement/search/detail?activityId="
-									+ queryDTO.getActivity().getAvtNo()), //
+					queryDTO.getCheck() == 1 ? new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+							: new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ queryDTO.getActivity().getAvtNo()),//
 					new BreadDTO("報名人員清冊",
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + queryDTO.getCheck()), //
@@ -223,18 +212,17 @@ public class ManagerSignUpAvtController  extends BaseController{
 		
 		try {
 
-			QueryMemberQualifyDTO queryMemberQualifyDTO = managerService.findMemberAllData(dto);
+			QueryMemberQualifyDTO queryMemberQualifyDTO = managerService.findMemberAllData(dto,0,0);
 			this.showResult(queryMemberQualifyDTO.getMemberDTOs(), theModel);
 
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					check == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
+					check == 1 ? new BreadDTO("活動審核", "/manager/activityReview")
 							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(dto.getActivity().getAvtName(),
-							"/manager/activityManagement/search/detail?activityId="
-									+ avtNo), //
+					dto.getCheck() == 1 ? new BreadDTO(dto.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ dto.getActivity().getAvtNo())//
+							: new BreadDTO(dto.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ dto.getActivity().getAvtNo()),//
 					new BreadDTO("報名人員清冊",
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ avtNo + "&check=" + check), //
@@ -264,18 +252,17 @@ public class ManagerSignUpAvtController  extends BaseController{
 		try {
 			queryDTO.setActivity(this.basicService.findActivity(queryDTO.getActivity().getAvtNo()));
 			queryDTO.setStatus("yes");//只能查有資格的會員
-			QueryMemberQualifyDTO queryMemberQualifyDTO = managerService.findMemberAllData(queryDTO);
+			QueryMemberQualifyDTO queryMemberQualifyDTO = managerService.findMemberAllData(queryDTO,0,0);
 			this.showResult(queryMemberQualifyDTO.getMemberDTOs(), theModel);
 
 			theModel.addAttribute("queryDTO", queryMemberQualifyDTO);
 			
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
+					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview")
 							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(queryDTO.getActivity().getAvtName(),
-							"/manager/activityManagement/search/detail?activityId="
-									+ queryDTO.getActivity().getAvtNo()), //
+					queryDTO.getCheck() == 1 ? new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+							: new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ queryDTO.getActivity().getAvtNo()),//
 					new BreadDTO("報名人員清冊",
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + queryDTO.getCheck()), //
@@ -346,11 +333,10 @@ public class ManagerSignUpAvtController  extends BaseController{
 			theModel.addAttribute("queryDTO", queryDTO);
 			this.breadcrumbAndNavbar(theModel, "manager", //
 					"活動管理", //
-					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview/search")
+					queryDTO.getCheck() == 1 ? new BreadDTO("活動審核", "/manager/activityReview")
 							: new BreadDTO("我的活動管理", "/manager/activityManagement"), //
-					new BreadDTO(queryDTO.getActivity().getAvtName(),
-							"/manager/activityManagement/search/detail?activityId="
-									+ queryDTO.getActivity().getAvtNo()), //
+					queryDTO.getCheck() == 1 ? new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityReview/search/detail?activityId="+ queryDTO.getActivity().getAvtNo())//
+							: new BreadDTO(queryDTO.getActivity().getAvtName(),"/manager/activityManagement/search/detail?activityId="+ queryDTO.getActivity().getAvtNo()),//
 					new BreadDTO("報名人員清冊",
 							"/manager/activityManagement/search/detail/signAvtData?activityId="
 									+ queryDTO.getActivity().getAvtNo() + "&check=" + check), //

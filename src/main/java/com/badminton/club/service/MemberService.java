@@ -40,12 +40,20 @@ public interface MemberService {
 	/**
 	 * 我的活動 
 	 * 會員有參與的活動"signupAvt報名人員清單"(複合式查詢)
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
-	public List<SignupAvt> searchJoinActivity(String userNo, QueryActivityDTO queryActivityDTO);
+	public List<SignupAvt> searchJoinActivity(String userNo, QueryActivityDTO queryActivityDTO,int indexPage,int countOnePage);
 
 	/**
 	 * 會員參與的該項活動之所有"signupAvt報名人員清單"(個人加親友)
 	 */
 	public List<SignupAvt> joinActivityData(String userNo, int theAvtNo);
+
+	/**
+	 * 會員有參與的活動"signupAvt報名人員清單"(複合式查詢)
+	 * 查詢結果總筆數
+	 */
+	public int searchJoinActivityCount(String userNo, QueryActivityDTO queryActivityDTO);
 
 }

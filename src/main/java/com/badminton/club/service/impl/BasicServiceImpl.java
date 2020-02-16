@@ -22,11 +22,14 @@ import com.badminton.club.dto.FooterDTO;
 import com.badminton.club.entity.Activity;
 import com.badminton.club.entity.ActivityType;
 import com.badminton.club.entity.Member;
+import com.badminton.club.entity.QAuthority;
+import com.badminton.club.entity.QMember;
 import com.badminton.club.entity.Role;
 import com.badminton.club.entity.SignupAvt;
 import com.badminton.club.entity.System;
 import com.badminton.club.entity.User;
 import com.badminton.club.service.BasicService;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 /**
  * 共用(活動，會員，管理員，超級管理員) 服務
@@ -43,11 +46,15 @@ public class BasicServiceImpl implements BasicService {
 	private UserRepository userRepository;
 	private SignupAvtRepository signupAvtRepository;
 	private RoleRepository roleRepository;
+	private JPAQueryFactory jpaQueryFactory;
 	
-	@Autowired
-	public BasicServiceImpl(SystemRepository systemRepository, ActivityRepository activityRepository,
+	
+	@Autowired	
+    public BasicServiceImpl(SystemRepository systemRepository, ActivityRepository activityRepository,
 			ActivityTypeRepository activityTypeRepository, MemberRepository memberRepository,
-			UserRepository userRepository, SignupAvtRepository signupAvtRepository, RoleRepository roleRepository) {
+			UserRepository userRepository, SignupAvtRepository signupAvtRepository, RoleRepository roleRepository,
+			JPAQueryFactory jpaQueryFactory) {
+		super();
 		this.systemRepository = systemRepository;
 		this.activityRepository = activityRepository;
 		this.activityTypeRepository = activityTypeRepository;
@@ -55,7 +62,9 @@ public class BasicServiceImpl implements BasicService {
 		this.userRepository = userRepository;
 		this.signupAvtRepository = signupAvtRepository;
 		this.roleRepository = roleRepository;
+		this.jpaQueryFactory = jpaQueryFactory;
 	}
+
 	
 	/**
 	 * 社團介紹資料
@@ -214,6 +223,50 @@ public class BasicServiceImpl implements BasicService {
 		} catch (Exception e) {
 			throw e;
 		}
+	}
+	@Override
+	@Transactional
+	public void updateActivityStatus(Activity activity) {
+		try {
+			int sum=signupAvtRepository.getActivitySum(activity.getAvtNo());
+			Date nowDate=new Date();
+			// 活動名額上限 小於或等於 報名人員清單總數，活動狀態更改為"已額滿"
+			if (activity.getAvtUpp() <= sum) {
+				activity.setAvtStat("已額滿");
+				
+			}else if(activity.getAvtUpp() > sum && nowDate.before(activity.getAvtCutDate()) && nowDate.before(activity.getAvtDateS())){
+				activity.setAvtStat("報名中");
+			
+			}else if(nowDate.after(activity.getAvtCutDate()) && nowDate.before(activity.getAvtDateS())){
+				activity.setAvtStat("已截止");
+			
+			}else if(nowDate.after(activity.getAvtDateS())){
+				activity.setAvtStat("已結束");
+			}
+			activityRepository.save(activity);
+			
+			log.info("Activity Status:{}, ", activity.getAvtStat());
+
+		} catch (Exception e) {
+			throw e;
+		}
+	}
+	
+	/**
+	 * 取得所有管理員資料
+	 */
+	public List<Member> getAllManager(){
+		
+		QAuthority theAuthority = QAuthority.authority;
+		List<String> userIds = jpaQueryFactory.select(theAuthority.user.username).from(theAuthority).where(
+				theAuthority.role.authority.eq("ROLE_MANAGER").and(theAuthority.user.enabled.eq((byte) 1)))
+				.fetch();
+			
+		QMember theMember = QMember.member;
+		List<Member> members = jpaQueryFactory.selectFrom(theMember).from(theMember).where(theMember.memUser.in(userIds))
+				.orderBy(theMember.memTime.desc()).fetch();
+		
+		return members;		
 	}
 
 }

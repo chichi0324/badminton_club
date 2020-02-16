@@ -13,9 +13,24 @@ public class QueryActivityCheckDTO {
 	private String statusPass;
 	//依活動舉辦人
 	private String holder;
+	//當頁頁數
+	private int page;
 	//活動搜尋結果列表
 	private List<ActivityDTO> activityDTOs=new ArrayList<>();
 	
+	public QueryActivityCheckDTO() {
+		
+	}
+		
+	public QueryActivityCheckDTO(String keyWord, String statusPass, String holder, int page) {
+		super();
+		this.keyWord = keyWord;
+		this.statusPass = statusPass;
+		this.holder = holder;
+		this.page = page;
+	}
+
+
 	public String getKeyWord() {
 		return keyWord;
 	}
@@ -40,6 +55,12 @@ public class QueryActivityCheckDTO {
 	}
 	public void setActivityDTOs(List<ActivityDTO> activityDTOs) {
 		this.activityDTOs = activityDTOs;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 	
 	

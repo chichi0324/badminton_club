@@ -4,27 +4,25 @@ import java.util.List;
 
 import com.badminton.club.dto.ApplyAllDTO;
 import com.badminton.club.dto.ApplyDTO;
-import com.badminton.club.dto.FooterDTO;
 import com.badminton.club.dto.MessageDTO;
 import com.badminton.club.dto.QueryActivityDTO;
 import com.badminton.club.entity.Activity;
-import com.badminton.club.entity.ActivityType;
-import com.badminton.club.entity.AvtMessage;
 /**
  * 活動專區(活動總覽，活動報名) 服務介面
  */
 public interface ActivityService {
 	/**
-	 * 活動總覽所有活動 
-	 * (審核通過，非草稿) 
-	 * 照活動起始日排序(新-->舊)
+	 * 依條件搜尋活動(複合式查詢)
+	 * 查詢結果總筆數
 	 */
-	public List<Activity> findAll();
+	public int searchCount(QueryActivityDTO queryActivityDTO);
 
 	/**
 	 * 依條件搜尋活動(複合式查詢)
+	 * indexPage:當頁
+	 * countOnePage:一頁筆數
 	 */
-	public List<Activity> search(QueryActivityDTO queryActivityDTO);
+	public List<Activity> search(QueryActivityDTO queryActivityDTO,int indexPage,int countOnePage);
 
 	
 	/**

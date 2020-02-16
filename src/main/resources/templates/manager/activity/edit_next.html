@@ -53,7 +53,7 @@
                 <div class="text-left">
                   <button id="btnStartShotImage" type="button" class="btn btn-primary" 
                           style="background-color: #DDDDDD; color: black">我的圖片</button>
-                  <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">下載圖片</a>
+                  <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">壓縮並下載</a>
                 </div>
               </div>
 
@@ -189,7 +189,7 @@
               <br><br>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <input type="file" class="form-control" name="confirm" id="uplImg1" placeholder="" />
+                  <input type="file" class="form-control" name="confirm" id="uplImg1" placeholder="" accept="image/*"/>
                   <div>
                       <img class="img1 img-responsive center-block" th:src="@{(${activityDTO.activity.advocates[0].advImg})}" 
                            width="100%" th:if="${advocate_count >=1}" id="img_uplImg1">
@@ -206,7 +206,7 @@
               <br><br>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <input type="file" class="form-control" name="confirm" id="uplImg2" placeholder="" />
+                  <input type="file" class="form-control" name="confirm" id="uplImg2" placeholder="" accept="image/*"/>
                   <div>
                       <img class="img2 img-responsive center-block" th:src="@{(${activityDTO.activity.advocates[1].advImg})}" 
                            width="100%" th:if="${advocate_count >=2}" id="img_uplImg2">
@@ -223,7 +223,7 @@
               <br><br>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <input type="file" class="form-control" name="confirm" id="uplImg3" placeholder="" />
+                  <input type="file" class="form-control" name="confirm" id="uplImg3" placeholder="" accept="image/*"/>
                   <div>
                       <img class="img3 img-responsive center-block" th:src="@{(${activityDTO.activity.advocates[2].advImg})}" 
                            width="100%" th:if="${advocate_count >=3}" id="img_uplImg3">
@@ -240,7 +240,7 @@
               <br><br>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <input type="file" class="form-control" name="confirm" id="uplImg4" placeholder="" />
+                  <input type="file" class="form-control" name="confirm" id="uplImg4" placeholder="" accept="image/*"/>
                   <div>
                       <img class="img4 img-responsive center-block" th:src="@{(${activityDTO.activity.advocates[3].advImg})}" 
                            width="100%" th:if="${advocate_count >=4}" id="img_uplImg4">
@@ -257,7 +257,7 @@
               <br><br>
               <div class="cols-sm-10">
                 <div class="input-group">
-                  <input type="file" class="form-control" name="confirm" id="uplImg5" placeholder="" />
+                  <input type="file" class="form-control" name="confirm" id="uplImg5" placeholder="" accept="image/*"/>
                   <div>
                       <img class="img5 img-responsive center-block" th:src="@{(${activityDTO.activity.advocates[4].advImg})}" 
                            width="100%" th:if="${advocate_count >=5}" id="img_uplImg5">
@@ -274,7 +274,8 @@
           <div class="man_avt_conrent">
              <button class="btn btn-primary" type="button"
                   style="background-color: #DDDDDD; color: black" onclick="saveAllPicture()">更新及上傳圖片</button>
-             <font color='red'>「活動主題照片」和「活動宣傳照片」選擇完成，及裁剪後，點選「更新及上傳圖片」。</font><br>
+             <font color='blue'>「活動主題照片」和「活動宣傳照片」選擇完成，及裁剪後，點選「更新及上傳圖片」。</font><br>
+             <font color='red'>注意：上傳圖片用Chrome或FireFox(電腦和手機都是)。</font>
           </div>
       </div>
       <br><br>
@@ -314,6 +315,15 @@
 		var header = $("meta[name='_csrf_header']").attr("content");
 		var token = $("meta[name='_csrf']").attr("content");
 		
+		function empty(element) {
+		    if(element==null || element==''){
+		       return true;
+		    }else{
+		       return false;
+		    }
+		}
+		
+		
 		//圖片驗證，更新及存檔
 		function saveAllPicture() {
 		
@@ -321,18 +331,22 @@
 		
 		    if(check==true){
 		
-			saveImg();
+			var errorImg=saveImg(); 
 			
-			saveAdv("1");
-			saveAdv("2");
-			saveAdv("3");
-			saveAdv("4");
-			saveAdv("5");
+		 	var errorAdv1=saveAdv("1");
+		 	var errorAdv2=saveAdv("2");
+		 	var errorAdv3=saveAdv("3");
+		 	var errorAdv4=saveAdv("4");
+		 	var errorAdv5=saveAdv("5"); 
 			
-			alert('您的活動圖片已經上傳成功');
+		 	    if(empty(errorImg) && empty(errorAdv1) && empty(errorAdv2) && empty(errorAdv3) && empty(errorAdv4) && empty(errorAdv5)){
+		 		   alert('您的活動圖片已經上傳成功');	
+		 	    }
+			
 		    }
 
 		}
+		
 
         //活動主題圖片存檔
 		function saveImg() {
@@ -349,12 +363,21 @@
 			for (let i = 0; i < blobBin.length; i++) {
 				array.push(blobBin.charCodeAt(i));
 			}
-			const file = new Blob([new Uint8Array(array)], { type: 'image/jpg' });
+			const file = new Blob([new Uint8Array(array)], { type: 'image/jpg' });		
+			
+			var imgSize=file.size;
+			if(imgSize>8*1024*1024){
+	            alert('活動主題圖片裁剪後大於8M,請重新剪裁大小或壓縮檔案再重新上傳');
+	            return 'over';
+	        }  
 
 			// 將file 加至 formData
 			const formData = new FormData()
 			formData.append('file', file, [[${ activityDTO.avtImgDTO.avtImg }]]);
 
+			//傳至後端失敗訊息
+			var errorMessage;
+			
 			// send ajax request 
 			// Spring Security5中默認開啟了CSRF保護，因此提交驗證表單時，必須附帶Token信息
 			fetch('/badminton/manager/activityManagement/editNext/saveImg', {
@@ -364,9 +387,14 @@
 					'X-CSRF-TOKEN': token
 				}
 			}).then(res => res.text())
-				.then(resText => console.log('您的活動照片已成功上傳'))
+			    .catch(error => errorMessage=error)
+				.then(resText => console.log('活動主題圖片已成功上傳'))
+				
+		    if(!empty(errorMessage)){
+		    	alert('活動主題圖片上傳失敗：'+errorMessage);
+		    }
 
-
+				return errorMessage;
 		}
 		
 		//活動宣傳圖片存檔
@@ -378,6 +406,12 @@
 			if(file==undefined){
 				return;
 			}
+			
+			var imgSize=file.size;
+			if(imgSize>3*1024*1024){
+			    alert('圖片'+picNo+'大於3M,請壓縮後重新上傳');
+			    return 'over';
+			 } 
 			
 			const formData = new FormData();
 
@@ -400,6 +434,9 @@
 			default:
 			}
 			
+			//傳至後端失敗訊息
+			var errorMessage;
+			 
 			fetch('/badminton/manager/activityManagement/editNext/saveAdv', {
 				method: 'POST',
 				body: formData,
@@ -407,8 +444,14 @@
 					'X-CSRF-TOKEN': token
 				}
 			}).then(res => res.text())
+			    .catch(error => errorMessage=error)
 				.then(resText => console.log('您的活動宣傳照片'+picNo+'已成功上傳'));
 			
+			if(!empty(errorMessage)){
+		    	alert('圖片'+picNo+'上傳失敗：'+errorMessage);
+		    }
+			
+			return errorMessage;
 		}
 		
 		//驗證圖片(活動宣傳圖片是否照順序上傳)
@@ -441,14 +484,7 @@
 		    return true;
 		    
 		}
-		
-		function empty(element) {
-		    if(element==null || element==''){
-		       return true;
-		    }else{
-		       return false;
-		    }
-		}
+
 		
 		//刪除活動宣傳圖
 		function deletePicture(picNo) {
@@ -514,6 +550,7 @@
 						'X-CSRF-TOKEN': token
 					}
 				}).then(res => res.text())
+				    .catch(error => alert('圖片'+picNo+'刪除失敗：'+error))
 					.then(resText => console.log('您的活動宣傳照片'+picNo+'已成功刪除'));
 			
 			 }else if(file==undefined && imgSrcThis!=null){
@@ -527,6 +564,7 @@
 						'X-CSRF-TOKEN': token
 					}
 				}).then(res => res.text())
+				    .catch(error => alert('圖片'+picNo+'刪除失敗：'+error))
 					.then(resText => console.log('您的活動宣傳照片'+picNo+'已成功刪除'));
 			 }
 		}

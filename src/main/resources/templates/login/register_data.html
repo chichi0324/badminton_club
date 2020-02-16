@@ -29,7 +29,7 @@
 
 		<div class="col-md-3 col-sm-12"></div>
 		<div class="col-md-6 col-sm-12">
-			<form th:action="@{/signIn/register_next}" method="post" class="form-horizontal bg-img"
+			<form th:action="@{/signIn/register_Success}" method="post" class="form-horizontal bg-img"
 				th:object="${registerDTO}">
 				<h1 class="login_title">基分撲蝶會活動網站</h1>
 				<h1 class="login_title">註冊</h1>
@@ -47,7 +47,7 @@
 					</div>
 					<div class="col-sm-12 prompt">
 						<p>
-							<font color='grey'>(帳號格式：請輸入6碼，必須包含英文或數字)</font>
+							<font color='grey'>(帳號格式：請輸入6~10碼，必須包含英文或數字)</font>
 						</p>
 					</div>
 				</div>
@@ -57,12 +57,12 @@
 						<font color='red'>*</font>&nbsp;密碼:
 					</label>
 					<div class="col-sm-10">
-						<input type="password" class="form-control" id="password" name="password" placeholder="輸入你的密碼"
-							th:field="*{user.password}">
+						<input type="password" class="form-control" id="password" name="user.password" placeholder="輸入你的密碼"
+							th:value="${registerDTO.user.password}">
 					</div>
 					<div class="col-sm-12 prompt">
 						<p>
-							<font color='grey'>(密碼格式：請輸入6碼，必須包含英文或數字)</font>
+							<font color='grey'>(密碼格式：請輸入6~10碼，必須包含英文或數字)</font>
 						</p>
 					</div>
 				</div>
@@ -73,7 +73,7 @@
 					</label>
 					<div class="col-sm-9">
 						<input type="password" class="form-control" id="ckeckPwd" name="ckeckPwd" placeholder="再次輸入你的密碼"
-							th:field="*{ckeckPwd}">
+							th:value="${registerDTO.ckeckPwd}">
 					</div>
 				</div>
 
@@ -185,7 +185,7 @@
 			document.getElementById("birthDate").value = "1993-03-03";
 			document.getElementById("identificationCard").value = "H887339402";
 			document.getElementById("phone").value = "0956782453";
-			document.getElementById("email").value = "???";
+			document.getElementById("email").value = "j43343@gmail.com";
 			document.getElementById("address").value = "新北市板橋區縣民大道二段7號6樓";
 			document.getElementsByName("inform")[0].checked = true;
 		}
@@ -199,7 +199,7 @@
 			document.getElementById("birthDate").value = "1990-02-03";
 			document.getElementById("identificationCard").value = "A334998573";
 			document.getElementById("phone").value = "0976348926";
-			document.getElementById("email").value = "???";
+			document.getElementById("email").value = "xujiaqi38@gmail.com";
 			document.getElementById("address").value = "台北市中山區中山北路四段1號";
 			/* document.getElementsByName("inform")[0].checked = true; */
 		}

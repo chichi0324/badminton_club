@@ -7,8 +7,6 @@ import javax.validation.Valid;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +28,6 @@ import com.badminton.club.entity.SignupAvt;
 import com.badminton.club.service.ActivityService;
 import com.badminton.club.service.BasicService;
 import com.badminton.club.service.MemberService;
-import com.badminton.club.service.impl.BasicServiceImpl;
 /**
  * 活動專區(活動總覽，活動報名) 控制器
  */
@@ -56,10 +53,13 @@ public class ActivityController extends BaseController{
 	@GetMapping("/search")
 	public String activitySearch(Model theModel) {
 		try {
-			theModel.addAttribute("queryActivity", new QueryActivityDTO());
+			QueryActivityDTO queryActivityDTO=new QueryActivityDTO("","","",1);
+			theModel.addAttribute("queryActivity", queryActivityDTO);
 
-			List<Activity> theActivities = activityService.findAll();
-			this.showResult(theActivities, theModel);
+			//活動查詢．第1頁，1頁共7筆
+			List<Activity> theActivities = activityService.search(queryActivityDTO,queryActivityDTO.getPage(),8);
+			this.showResult(theActivities, theModel);	
+			this.getPage(queryActivityDTO.getPage(),8,activityService.searchCount(queryActivityDTO), theModel);
 
 			this.showActivityRowList(theModel, theActivities);
 
@@ -83,9 +83,11 @@ public class ActivityController extends BaseController{
 			if (queryActivityDTO == null) {
 				queryActivityDTO = new QueryActivityDTO();
 			}
+			theModel.addAttribute("queryActivity", queryActivityDTO);
 
-			List<Activity> theActivities = activityService.search(queryActivityDTO);
-			this.showResult(theActivities, theModel);
+			List<Activity> theActivities = activityService.search(queryActivityDTO,queryActivityDTO.getPage(),8);
+			this.showResult(theActivities, theModel);		
+			this.getPage(queryActivityDTO.getPage(),8,activityService.searchCount(queryActivityDTO), theModel);
 
 			this.showActivityRowList(theModel, theActivities);
 

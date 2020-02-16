@@ -126,5 +126,24 @@ public class RegisterLoginServiceImpl implements RegisterLoginService {
 	    }
 		return sb.toString();	
 	}
+	
+	/**
+	 * 忘記密碼(身分證後六碼)
+	 */
+	@Override
+	@Transactional
+	public void getIdCardForPassword(User user) {
+		try {			
+			Optional<Member> memberResult = this.memberRepository.findById(user.getUsername());
+			Member member = memberResult.isPresent() ? memberResult.get() : null;
+			
+			user.setPassword(BCrypt.getDecodePassword(member.getMemIdn().substring(4, 10)));
+			this.userRepository.save(user);			
+			
+		} catch (Exception e) {
+			log.debug(e.getMessage());
+			throw e;
+		}
+	}
 
 }

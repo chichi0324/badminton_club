@@ -19,12 +19,25 @@ public class QueryMemberQualifyDTO {
 	private String status;
 	//會員搜尋結果列表
 	private List<MemberDTO> memberDTOs=new ArrayList<>();
+	//當頁頁數(社員管理)
+	private int page;
 	
 	//帶入是否為活動審核(報名人員清冊)
 	private int check;
 	//帶入該活動資料(報名人員清冊)
 	private Activity activity;
 	
+	
+	
+	public QueryMemberQualifyDTO() {
+		super();
+	}
+	public QueryMemberQualifyDTO(String keyWord, String status, int page) {
+		super();
+		this.keyWord = keyWord;
+		this.status = status;
+		this.page = page;
+	}
 	public String getKeyWord() {
 		return keyWord;
 	}
@@ -54,6 +67,12 @@ public class QueryMemberQualifyDTO {
 	}
 	public void setActivity(Activity activity) {
 		this.activity = activity;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	

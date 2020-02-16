@@ -8,8 +8,6 @@ import java.util.List;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -18,8 +16,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +27,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.badminton.club.dto.ActivityDTO;
 import com.badminton.club.dto.BreadDTO;
-import com.badminton.club.dto.FooterDTO;
 import com.badminton.club.dto.QueryActivityHoldDTO;
 import com.badminton.club.entity.Activity;
-import com.badminton.club.entity.AvtPreview;
 import com.badminton.club.service.ActivityService;
 import com.badminton.club.service.BasicService;
 import com.badminton.club.service.ManagerActivityService;
-import com.badminton.club.service.ManagerService;
 import com.badminton.club.tools.DateTool;
 import com.badminton.club.tools.FileTool;
 
@@ -48,6 +41,8 @@ import com.badminton.club.tools.FileTool;
 @Controller
 @RequestMapping("/manager/activityManagement")
 public class ManagerActivityController extends BaseController{
+	
+	private static final Logger log = LoggerFactory.getLogger(ManagerActivityController.class);
 
 	@Autowired
 	private ActivityService activityService;
@@ -65,10 +60,12 @@ public class ManagerActivityController extends BaseController{
 	 */
 	@GetMapping("")
 	public String activityManagement(Model theModel) {
+		QueryActivityHoldDTO queryDTO=new QueryActivityHoldDTO("","","","",1);
 		try {
 			QueryActivityHoldDTO queryActivityHoldDTO = managerActivityService
-					.findAllActivityHold(new QueryActivityHoldDTO(), this.getUserId());
+					.findAllActivityHold(queryDTO, this.getUserId(),queryDTO.getPage(),7);
 			this.showResult(queryActivityHoldDTO.getActivityDTOs(), theModel);
+			this.getPage(queryDTO.getPage(),7,managerActivityService.searchActivityHoldCount(queryDTO, this.getUserId()), theModel);
 
 			theModel.addAttribute("queryDTO", queryActivityHoldDTO);
 
@@ -92,8 +89,9 @@ public class ManagerActivityController extends BaseController{
 			@ModelAttribute("queryDTO") @Valid QueryActivityHoldDTO queryDTO) {
 		try {
 			QueryActivityHoldDTO queryActivityHoldDTO = managerActivityService.findAllActivityHold(queryDTO,
-					this.getUserId());
+					this.getUserId(),queryDTO.getPage(),7);
 			this.showResult(queryActivityHoldDTO.getActivityDTOs(), theModel);
+			this.getPage(queryDTO.getPage(),7,managerActivityService.searchActivityHoldCount(queryDTO, this.getUserId()), theModel);
 
 			theModel.addAttribute("queryDTO", queryActivityHoldDTO);
 
@@ -263,6 +261,8 @@ public class ManagerActivityController extends BaseController{
 	@RequestMapping("/editNext/saveImg")
 	public String activityManagementEditNextSaveImg(@RequestParam MultipartFile file, Model theModel,
 			ServletRequest request, ServletResponse response) {
+		
+		log.info("活動主題圖片存檔:{}", file.getOriginalFilename() );
 
 		// 【取得 session上一頁活動資料】
 		HttpSession session = this.getHttpSession(theModel, request, response);
@@ -290,6 +290,8 @@ public class ManagerActivityController extends BaseController{
 	@RequestMapping("/editNext/saveAdv")
 	public String activityManagementEditNextsaveAdv(@RequestParam MultipartFile file, Model theModel,
 			ServletRequest request, ServletResponse response) {
+		
+		log.info("活動宣傳圖片存檔:{}", file.getOriginalFilename() );
 
 		// 【取得 session上一頁活動資料】
 		HttpSession session = this.getHttpSession(theModel, request, response);
@@ -328,6 +330,8 @@ public class ManagerActivityController extends BaseController{
 	@RequestMapping("/editNext/deleteImgAdv")
 	public String activityManagementEditNextDeleteImgAdv(@RequestParam MultipartFile file, Model theModel,
 			ServletRequest request, ServletResponse response) {
+		
+		log.info("活動宣傳圖片刪除:{}", file.getOriginalFilename() );
 
 		// 【取得 session上一頁活動資料】
 		HttpSession session = this.getHttpSession(theModel, request, response);
@@ -434,6 +438,7 @@ public class ManagerActivityController extends BaseController{
 			@RequestParam("type") String type, //
 			@RequestParam("checkStatus") String checkStatus, //
 			@RequestParam("signUpStatus") String signUpStatus, //
+			@RequestParam("page") int page, //
 			Model theModel) {
 
 		QueryActivityHoldDTO queryDTO = new QueryActivityHoldDTO();
@@ -441,13 +446,14 @@ public class ManagerActivityController extends BaseController{
 		queryDTO.setType(type);
 		queryDTO.setCheckStatus(checkStatus);
 		queryDTO.setSignUpStatus(signUpStatus);
+		queryDTO.setPage(page);
 
 		try {
 
 			this.managerActivityService.deleteActivity(avtNo);
 
 			return "redirect:/manager/activityManagement/Search?keyWord=" + URLEncoder.encode(keyWord, "utf-8")
-					+ "&type=" + type + "&checkStatus=" + checkStatus + "&signUpStatus=" + signUpStatus;
+					+ "&type=" + type + "&checkStatus=" + checkStatus + "&signUpStatus=" + signUpStatus + "&page=" + page;
 
 		} catch (Exception e) {
 			this.activityManagementSearch(theModel, queryDTO);

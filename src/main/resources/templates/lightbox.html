@@ -30,8 +30,8 @@
 					<!-- 幻燈片主圖區 -->
 					<div class="carousel-inner">
 					  <div class="item active" th:if="${activities_size} == 0">
-							<img th:src="@{/images/game2.jpg}" align="right" alt="" class="img_item">
-							<img th:src="@{/images/game2.jpg}" align="right" alt="" class="img_gray">
+							<img th:src="@{/images/welcome.jpg}" align="right" alt="" class="img_item">
+							<img th:src="@{/images/welcome.jpg}" align="right" alt="" class="img_gray">
 							<div class="top-left">
 								<a th:href="@{/activity/search}" class="link_activity">
 									<br>
@@ -49,7 +49,7 @@
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
 									class="link_activity">
 									<label th:text="${activities_show[0].avtName}"></label><br>
-									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,19)}"></label><br>
+									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[0].avtLoc}"></label><br>
 								</a>
 							</div>
@@ -62,7 +62,7 @@
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
 									class="link_activity">
 									<label th:text="${activities_show[0].avtName}"></label><br>
-									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,19)}"></label><br>
+									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[0].avtLoc}"></label><br>
 								</a>
 							</div>
@@ -75,7 +75,7 @@
 							<div class="top-right">
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[1].avtNo})}" class="link_activity">
 									<label th:text="${activities_show[1].avtName}"></label><br>
-									<label th:text="${#strings.substring(activities_show[1].avtGatDate,0,19)}"></label><br>
+									<label th:text="${#strings.substring(activities_show[1].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[1].avtLoc}"></label><br>
 								</a>
 							</div>

@@ -65,7 +65,7 @@ header a, header li {
 	position: absolute;
 	top: 120px;
 	left: 9%;
-	font-size: 300%;
+	font-size: 280%;
 	font-weight: bold;
 	color: white;
 	font: 30px;
@@ -79,7 +79,7 @@ header a, header li {
 	position: absolute;
 	top: 120px;
 	right: 9%;
-	font-size: 300%;
+	font-size: 280%;
 	font-weight: bold;
 	color: white;
 	/* -webkit-text-stroke: 5px #fff;
@@ -112,6 +112,9 @@ header a, header li {
 	width: 70%;
 }
 /*--------------------內容區--------------------*/
+body {
+	font-family:Microsoft JhengHei;
+}
 .content {
 	padding-top: 10px;
 	padding-bottom: 40px;
@@ -158,6 +161,14 @@ ul .show {
 }
 
 /*--------------------底部平台介紹--------------------*/
+#footer_computer{
+	display:block;
+}
+
+#footer_phone{
+	display:none;
+}
+
 footer {
 	background-color: black;
 	color: white;
@@ -189,12 +200,29 @@ footer a : hover {
 	
 }
 
-
+/*小螢幕(ex:iphone)*/
 @media only screen and (max-width: 600px) {
 	.qrCode {
 	margin-bottom: 2em;
 	width:100%;
+    }
+    #footer_computer{
+	display:none;
+    }
+
+    #footer_phone{
+	display:block;
+    }
 }
+/*中螢幕(ex:ipad)*/
+@media only screen and (max-width: 768px) and (min-width: 601px) {
+	#footer_computer{
+	display:block;
+   }
+
+   #footer_phone{
+	display:none;
+   }
 }
 /*--------------------錯誤訊息視窗--------------------*/
 #message_dialog {

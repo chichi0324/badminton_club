@@ -232,6 +232,10 @@ public class MemberController extends BaseController{
 		// 身份證字號
 		if (StringUtils.isBlank(dto.getMember().getMemIdn())) {
 			mistakes.add("請輸入身份證字號");
+		}else{
+			if(dto.getMember().getMemIdn().length()!=10){
+				mistakes.add("身份證字號為10碼");
+			}
 		}
 		// 手機號碼
 		if (StringUtils.isBlank(dto.getMember().getMemPhone())) {
@@ -259,10 +263,11 @@ public class MemberController extends BaseController{
 		if (StringUtils.isBlank(newDTO.getUser().getPassword())) {
 			mistakes.add("請輸入原密碼");
 		} else {
-			if (newDTO.getUser().getPassword().trim().length() != 6) {
-				mistakes.add("原密碼需為6碼");
+			if (!(newDTO.getUser().getPassword().trim().length() >= 6 && newDTO.getUser().getPassword().trim().length() <= 10)) {
+				mistakes.add("原密碼需為6~10碼");
 			}
-			if (!newDTO.getUser().getPassword().trim().matches("[a-zA-Z0-9]{6}")) {
+			if ((newDTO.getUser().getPassword().trim().length() >= 6 && newDTO.getUser().getPassword().trim().length() <= 10) &&
+					!newDTO.getUser().getPassword().trim().matches("[a-zA-Z0-9]{6,10}")) {
 				mistakes.add("原密碼必須包含英文和數字");
 			}
 			if (!BCrypt.checkOriginalPassword(newDTO.getUser().getPassword().trim(), oldDTO.getUser().getPassword())) {
@@ -273,10 +278,11 @@ public class MemberController extends BaseController{
 		if (StringUtils.isBlank(newDTO.getCkeckPwd())) {
 			mistakes.add("請輸入新密碼");
 		} else {
-			if (newDTO.getCkeckPwd().trim().length() != 6) {
-				mistakes.add("新密碼需為6碼");
+			if (!(newDTO.getCkeckPwd().trim().length() >= 6 && newDTO.getCkeckPwd().trim().length() <= 10)) {
+				mistakes.add("新密碼需為6~10碼");
 			}
-			if (!newDTO.getCkeckPwd().trim().matches("[a-zA-Z0-9]{6}")) {
+			if ((newDTO.getCkeckPwd().trim().length() >= 6 && newDTO.getCkeckPwd().trim().length() <= 10) &&
+					!newDTO.getCkeckPwd().trim().matches("[a-zA-Z0-9]{6,10}")) {
 				mistakes.add("新密碼必須包含英文和數字");
 			}
 			if (BCrypt.checkOriginalPassword(newDTO.getCkeckPwd().trim(), oldDTO.getUser().getPassword())) {
@@ -293,11 +299,12 @@ public class MemberController extends BaseController{
 	@GetMapping("/activity")
 	public String activity(Model theModel) {
 		try {
-			QueryActivityDTO queryActivityDTO = new QueryActivityDTO();
+			QueryActivityDTO queryActivityDTO = new QueryActivityDTO("","","",1);
 
-			List<SignupAvt> theSignupAvts = memberService.searchJoinActivity(getUserId(), queryActivityDTO);
+			List<SignupAvt> theSignupAvts = memberService.searchJoinActivity(getUserId(), queryActivityDTO,queryActivityDTO.getPage(),5);
 			theModel.addAttribute("theSignupAvts", theSignupAvts);
 			this.showResult(theSignupAvts, theModel);
+			this.getPage(queryActivityDTO.getPage(),5,memberService.searchJoinActivityCount(getUserId(), queryActivityDTO), theModel);
 
 			this.breadcrumbAndNavbar(theModel, "member", "社員專區", "我的活動");
 			this.getAllActivityShowLightBox(theModel);
@@ -322,9 +329,10 @@ public class MemberController extends BaseController{
 				queryActivityDTO = new QueryActivityDTO();
 			}
 
-			List<SignupAvt> theSignupAvts = memberService.searchJoinActivity(getUserId(), queryActivityDTO);
+			List<SignupAvt> theSignupAvts = memberService.searchJoinActivity(getUserId(), queryActivityDTO,queryActivityDTO.getPage(),5);
 			theModel.addAttribute("theSignupAvts", theSignupAvts);
 			this.showResult(theSignupAvts, theModel);
+			this.getPage(queryActivityDTO.getPage(),5,memberService.searchJoinActivityCount(getUserId(), queryActivityDTO), theModel);
 
 			this.breadcrumbAndNavbar(theModel, "member", "社員專區", "我的活動");
 			this.getAllActivityShowLightBox(theModel);

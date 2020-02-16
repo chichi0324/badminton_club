@@ -62,6 +62,7 @@
 							</select> &nbsp;&nbsp;
 						</div>
 						<div class="col-md-1 col-sm-12">
+							<input type="hidden" name="page" th:value="1" />
 							<button type="submit" class="btn btn-success">查詢</button>
 						</div>
 						<br>
@@ -77,40 +78,40 @@
 			<div class="row " th:if="${show_search_result}" style="padding-left:2%;padding-right:2%">
 				<table class="table table-striped table-bordered table-rwd">
 					<tr class="tr-only-hide">
-						<th style="white-space: nowrap;">報名時間</th>
-						<th style="white-space: nowrap;width:20%">活動圖片</th>
-						<th style="white-space: nowrap;">活動名稱</th>
-						<th style="white-space: nowrap;">活動日期</th>
-						<th style="white-space: nowrap;">集合時間</th>
-						<th style="white-space: nowrap;">集合地點</th>
-						<th style="white-space: nowrap;">活動類型</th>
-						<th>功能</th> 　
+						<th style="width:12%">報名時間</th>
+						<th style="width:18%">活動圖片</th>
+						<th style="width:18%">活動名稱</th>
+						<th style="width:12%">活動日期</th>
+						<th style="width:12%">集合時間</th>
+						<th style="width:11%">集合地點</th>
+						<th style="width:9%">活動類型</th>
+						<th style="width:8%">功能</th> 　
 					</tr>
 					<tr th:each="signUp : ${theSignupAvts}">
 						<td data-th="報名時間">
-							<p th:text="${#strings.substring(signUp.signTime,0,10)}"></p>
-							<p th:text="${#strings.substring(signUp.signTime,11,19)}" class="theTime"></p>
+							<span th:text="${#strings.substring(signUp.signTime,0,10)}"></span>
+							<span th:text="${#strings.substring(signUp.signTime,11,19)}" class="theTime"></span>
 						</td>
 						<td data-th="活動圖片"><img th:src="@{(${signUp.activity.avtImg})}" class="avt_img"></td>
 						<td data-th="活動名稱">
 							<h4 th:text="${signUp.activity.avtName}" class="avt_name"></h4>
 						</td>
 						<td th:if="${signUp.activity.avtDateS == signUp.activity.avtDateE}" data-th="活動日期">
-							<p th:text="${signUp.activity.avtDateS}"></p>
+							<span th:text="${signUp.activity.avtDateS}"></span>
 						</td>
 						<td th:if="${signUp.activity.avtDateS != signUp.activity.avtDateE}" data-th="活動日期">
-							<p th:text="${signUp.activity.avtDateS+'~'}"></p>
-							<p th:text="${signUp.activity.avtDateE}"></p>
+							<span th:text="${signUp.activity.avtDateS+'~'}"></span>
+							<span th:text="${signUp.activity.avtDateE}"></span>
 						</td>
 						<td data-th="集合時間">
-							<p th:text="${#strings.substring(signUp.activity.avtGatDate,0,10)}"></p>
-							<p th:text="${#strings.substring(signUp.activity.avtGatDate,11,19)}" class="theTime"></p>
+							<span th:text="${#strings.substring(signUp.activity.avtGatDate,0,10)}"></span>
+							<span th:text="${#strings.substring(signUp.activity.avtGatDate,11,16)}" class="theTime"></span>
 						</td>
 						<td data-th="集合地點">
-						    <p th:text="${signUp.activity.avtLoc}"></p>
+						    <span th:text="${signUp.activity.avtLoc}"></span>
 						</td>
 						<td data-th="活動類型">
-						    <p th:text="${signUp.activity.activityType.avtTypeName}"></p>
+						    <span th:text="${signUp.activity.activityType.avtTypeName}"></span>
 						</td>
 						<td data-th="功能">
 						    <a th:href="@{/member/activitySearch/detail(activityId=${signUp.activity.avtNo})}" class="btn btn-danger" role="button">詳細資料</a>
@@ -128,6 +129,27 @@
 				<label style="color:red;font-style:italic;">查無資料</label>
 			</div>
 
+		</div>
+		
+		<!--  分頁 -->
+		<div class="col-md-12 col-sm-12 " align="center">
+		<ul class="pagination" >
+            <li th:if="${indexPage==1}" th:class="'disabled'" ><a href="#">上一頁</a></li>
+            <li th:if="${indexPage!=1}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-1}}">上一頁</a></li>
+            
+            <li th:if="${indexPage-3 >=1}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-3}}" th:text="${indexPage -3}" >1</a></li>
+            <li th:if="${indexPage-2 >=1}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-2}}" th:text="${indexPage -2}" >1</a></li>
+            <li th:if="${indexPage-1 >=1}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage-1}}" th:text="${indexPage -1}" >1</a></li>
+            
+            <li class="active"><a href="#" th:text="${indexPage}" >1</a></li>
+            
+            <li th:if="${indexPage+1 <=totalPage}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+1}}" th:text="${indexPage +1}" >1</a></li>
+            <li th:if="${indexPage+2 <=totalPage}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+2}}" th:text="${indexPage +2}" >1</a></li>
+            <li th:if="${indexPage+3 <=totalPage}" ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+3}}" th:text="${indexPage +3}" >1</a></li>
+
+            <li th:if="${indexPage==totalPage}"  th:class="'disabled'" ><a href="#">下一頁</a></li>
+            <li th:if="${indexPage!=totalPage}"  ><a th:href="@{'/member/activitySearch?keyWord=' +${queryActivity.keyWord}+ '&type=' +${queryActivity.type}+ '&status=' +${queryActivity.status}+ '&page=' + ${indexPage+1}}">下一頁</a></li>
+		</ul><br>
 		</div>
 
 	</div>

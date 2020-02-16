@@ -32,7 +32,7 @@ public class User  {
 	private String password;
 
 	//bi-directional many-to-one association to Authority
-	@OneToMany(mappedBy="user",cascade=CascadeType.REFRESH,fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="user",cascade={CascadeType.REFRESH,CascadeType.REMOVE},fetch=FetchType.EAGER)
 	private List<Authority> authorities;
 
 	public User() {

@@ -64,19 +64,19 @@ public class Member  {
 	private Timestamp memTime;
 
 	//bi-directional many-to-one association to Activity
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member",cascade=CascadeType.REMOVE)
 	private List<Activity> activities;
 
 	//bi-directional many-to-one association to AvtMessage
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member",cascade=CascadeType.REMOVE)
 	private List<AvtMessage> avtMessages;
 
 	//bi-directional many-to-one association to AvtPreview
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member",cascade=CascadeType.REMOVE)
 	private List<AvtPreview> avtPreviews;
 
 	//bi-directional many-to-one association to SignupAvt
-	@OneToMany(mappedBy="member")
+	@OneToMany(mappedBy="member",cascade=CascadeType.REMOVE)
 	private List<SignupAvt> signupAvts;
 
 	public Member() {

@@ -58,7 +58,7 @@
 							<option th:value="'no'" th:text="尚無資格"></option>
 			</select> &nbsp;&nbsp;
             &nbsp;&nbsp;
-
+            <input type="hidden" name="page" th:value="1" />
             <button type="submit" class="btn btn-danger">查詢</button>
             <br><br>
           </div>
@@ -70,6 +70,7 @@
     
     <input type="hidden" th:field="*{keyWord}" />
     <input type="hidden" th:field="*{status}" />
+    <input type="hidden" th:field="*{page}" />
     
     <div class="row" th:if="${show_search_result}">
       <div class="manager_member">
@@ -78,16 +79,17 @@
             <th style="white-space: nowrap;">社員資格<br>
               全選&nbsp;<input type="checkbox" name="CheckAll" class="member_qualify" id="CheckAll">&nbsp;
             </th>
-            <th style="white-space: nowrap;">註冊時間&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <th style="white-space: nowrap;">帳號</th>
-            <th style="white-space: nowrap;">姓名&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <th style="white-space: nowrap;">性別</th>
-            <th style="white-space: nowrap;">生日&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+            <th style="white-space: nowrap;">註冊時間</th>
+            <th style="white-space: nowrap;">會員帳號</th>         
+            <th style="white-space: nowrap;padding-right:2em">姓名</th>
+            <th style="white-space: nowrap;padding-right:1em">性別</th>
+            <th style="white-space: nowrap;padding-right:4.5em">生日</th>
             <th style="white-space: nowrap;">身分證</th>
             <th style="white-space: nowrap;">手機號碼</th> 　
             <th style="white-space: nowrap;">Email</th>
-            <th style="width:10%">地址</th>
-            <th style="width:10%">大頭貼</th>
+            <th style="white-space: nowrap;padding-right:10em">地址</th>     
+            <th style="white-space: nowrap;">大頭貼</th>
+            <th style="white-space: nowrap;" sec:authorize="hasRole('SURPERMANAGER')">功能</th>
           </tr>
           <tr th:each="memberDTO, m: *{memberDTOs}">
             <td data-th="社員資格">
@@ -97,46 +99,51 @@
               <span th:if="${memberDTO.authorityDisable=='notEdit'}">✔</span>
             </td>
             <td data-th="註冊時間">
-                <p th:text="${#strings.substring(memberDTO.member.memTime,0,10)}"></p>
-				<p th:text="${#strings.substring(memberDTO.member.memTime,11,19)}" class="theTime"></p>
+                <span th:text="${#strings.substring(memberDTO.member.memTime,0,10)}"></span>
+				<span th:text="${#strings.substring(memberDTO.member.memTime,11,19)}" class="theTime"></span>
 				<input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memTime}" />
             </td>
             <td data-th="帳號">
-                <p th:text="${memberDTO.member.memUser}"></p>
+                <span th:text="${memberDTO.member.memUser}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memUser}" />
             </td>
             <td data-th="姓名">
-                <p th:text="${memberDTO.member.memName}"></p>
+                <span th:text="${memberDTO.member.memName}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memName}" />
             </td>
             <td data-th="性別">
-                <p th:if="${memberDTO.member.memGen=='M'}">男</p>
-                <p th:if="${memberDTO.member.memGen=='W'}">女</p>
+                <span th:if="${memberDTO.member.memGen=='M'}">男</span>
+                <span th:if="${memberDTO.member.memGen=='W'}">女</span>
             </td>
             <td data-th="生日">
-                <p th:text="${memberDTO.member.memBirth}"></p>
+                <span th:text="${memberDTO.member.memBirth}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].birthDate}" />
             </td>
             <td data-th="身分證">
-                <p th:text="${memberDTO.member.memIdn}"></p>
+                <span th:text="${memberDTO.member.memIdn}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memIdn}" />
             </td>
             <td data-th="手機號碼">
-                <p th:text="${memberDTO.member.memPhone}"></p>
+                <span th:text="${memberDTO.member.memPhone}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memPhone}" />
             </td>
             <td data-th="Email">
-                <p th:text="${memberDTO.member.memMail}"></p>
+                <span th:text="${memberDTO.member.memMail}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memMail}" />
             </td>
             <td data-th="地址">
-                <p th:text="${memberDTO.member.memAddr}"></p>
+                <span th:text="${memberDTO.member.memAddr}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memAddr}" />
             </td>
             <td data-th="大頭貼">
-                <img th:src="@{(${memberDTO.member.memImg})}" style="width:100%">
+                <img th:src="@{(${memberDTO.member.memImg})}" class="sticker">
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memImg}" />
-            </td>　
+            </td>
+            <td data-th="功能" sec:authorize="hasRole('SURPERMANAGER')">
+                <a th:href="@{/manager/memberManagement/search/delete(userId=${memberDTO.member.memUser},keyWord=${queryDTO.keyWord},status=${queryDTO.status},page=${queryDTO.page})}"  
+                 class="btn btn-danger btn-xs" onclick="if (!(confirm('您確認要刪除這位會員? 該會員相關資料如辦過的活動，報名資料或留過的言...等也會一並刪除，若想保留相關資料建議移除權限即可。'))) return false"
+                  th:if="not${memberDTO.authorityDisable=='notEdit'}">刪除</a>	
+            </td>　　
           </tr>
         </table>
       </div>
@@ -144,9 +151,31 @@
     <div class="row" th:if="${show_search_result}">
       <div style="margin-top: 12px;text-align:right;">
         <button type="submit" class="btn btn-warning">批次更新</button>
-        <a th:href="@{/manager/memberManagement/search/csv(keyWord=${queryDTO.keyWord},status=${queryDTO.status})}" class="btn btn-warning" role="button">匯出CSV檔</a>
+        <a th:href="@{/manager/memberManagement/search/csv(keyWord=${queryDTO.keyWord},status=${queryDTO.status},page=${queryDTO.page})}" class="btn btn-warning" role="button">匯出CSV檔</a>
+      	<br><font color='grey'>注意：「批次更新」只會更新當頁數的資料，「匯出CSV檔」會匯出查詢條件查出所有資料。</font><br> 
       </div>
     </div>
+    
+    		<!--  分頁 -->
+	<div class="col-md-12 col-sm-12 " align="center">
+		<ul class="pagination" >
+            <li th:if="${indexPage==1}" th:class="'disabled'" ><a href="#">上一頁</a></li>
+            <li th:if="${indexPage!=1}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage-1}}">上一頁</a></li>
+            
+            <li th:if="${indexPage-3 >=1}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage-3}}" th:text="${indexPage -3}" >1</a></li>
+            <li th:if="${indexPage-2 >=1}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage-2}}" th:text="${indexPage -2}" >1</a></li>
+            <li th:if="${indexPage-1 >=1}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage-1}}" th:text="${indexPage -1}" >1</a></li>
+            
+            <li class="active"><a href="#" th:text="${indexPage}" >1</a></li>
+            
+            <li th:if="${indexPage+1 <=totalPage}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage+1}}" th:text="${indexPage +1}" >1</a></li>
+            <li th:if="${indexPage+2 <=totalPage}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage+2}}" th:text="${indexPage +2}" >1</a></li>
+            <li th:if="${indexPage+3 <=totalPage}" ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage+3}}" th:text="${indexPage +3}" >1</a></li>
+
+            <li th:if="${indexPage==totalPage}"  th:class="'disabled'" ><a href="#">下一頁</a></li>
+            <li th:if="${indexPage!=totalPage}"  ><a th:href="@{'/manager/memberManagement/search?keyWord=' +${queryDTO.keyWord}+ '&status=' +${queryDTO.status}+ '&page=' + ${indexPage+1}}">下一頁</a></li>
+		</ul><br>
+		</div>
     		<!--  查無資料 -->
 	<div class="row" th:if="not${show_search_result}">
         <div class="col-md-12 col-sm-12 " align="center">

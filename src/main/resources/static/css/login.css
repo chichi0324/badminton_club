@@ -10,7 +10,7 @@ body, html {
 
 .container {
   /* The image used */
-  background-image: url("../images/game2.jpg");
+  background-image: url("../images/login.jpg");
   min-height: 110%;
 
   /* Center and scale the image nicely */

@@ -71,15 +71,15 @@
       <div class="super_manager_admin">
         <table class="table table-striped table-bordered table-rwd">
           <tr class="tr-only-hide">
-            <th style="white-space: nowrap;">管理員資格</th>
-            <th style="white-space: nowrap;">帳號</th>
-            <th style="white-space: nowrap;">姓名&nbsp;&nbsp;&nbsp;&nbsp;</th>
-            <th style="white-space: nowrap;">生日</th>
-            <th style="white-space: nowrap;">身分證</th>
-            <th style="white-space: nowrap;">手機號碼</th> 　
-            <th style="white-space: nowrap;">Email</th>
-            <th style="width:15%">地址</th>
-            <th style="width:10%">大頭貼</th>
+            <th style="width:13%">管理員資格</th>
+            <th style="width:10%">帳號</th>
+            <th style="width:8%">姓名</th>
+            <th style="width:12%">生日</th>
+            <th style="width:10%">身分證</th>
+            <th style="width:10%">手機號碼</th> 　
+            <th style="width:12%">Email</th>
+            <th style="width:18%">地址</th>
+            <th style="width:7%">大頭貼</th>
           </tr>
           <tr th:each="memberDTO, m: *{memberDTOs}">
             <td data-th="管理員資格">
@@ -89,35 +89,35 @@
               <span th:if="${memberDTO.authorityDisable=='notEdit'}">✔</span>
             </td>
             <td data-th="帳號">
-                <p th:text="${memberDTO.member.memUser}"></p>
+                <span th:text="${memberDTO.member.memUser}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memUser}" />
             </td>
             <td data-th="姓名">
-                <p th:text="${memberDTO.member.memName}"></p>
+                <span th:text="${memberDTO.member.memName}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memName}" />
             </td>
             <td data-th="生日">
-                <p th:text="${memberDTO.member.memBirth}"></p>
+                <span th:text="${memberDTO.member.memBirth}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].birthDate}" />
             </td>
             <td data-th="身分證">
-                <p th:text="${memberDTO.member.memIdn}"></p>
+                <span th:text="${memberDTO.member.memIdn}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memIdn}" />
             </td>
             <td data-th="手機號碼">
-                <p th:text="${memberDTO.member.memPhone}"></p>
+                <span th:text="${memberDTO.member.memPhone}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memPhone}" />
             </td>
             <td data-th="Email">
-                <p th:text="${memberDTO.member.memMail}"></p>
+                <span th:text="${memberDTO.member.memMail}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memMail}" />
             </td>
             <td data-th="地址">
-                <p th:text="${memberDTO.member.memAddr}"></p>
+                <span th:text="${memberDTO.member.memAddr}"></span>
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memAddr}" />
             </td>
             <td data-th="大頭貼">
-                <img th:src="@{(${memberDTO.member.memImg})}" style="width:100%">
+                <img th:src="@{(${memberDTO.member.memImg})}" class="sticker">
                 <input type="hidden" th:field="*{memberDTOs[__${m.index}__].member.memImg}" />
             </td>　
           </tr>

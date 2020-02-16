@@ -1,4 +1,4 @@
-# 羽球社活動報名及管理系統
+# 基分撲蝶會活動網站(報名及管理系統)
 
 ***
 ##spring boot<br>
@@ -6,8 +6,9 @@
 ##spring data jpa<br>
 ##querydsl<br>
 ##thymeleaf<br>
-##mysql<br>
+##h2/mysql<br>
 ##maven<br>
+##響應式網頁設計<br>
 ***
 
 Spring_Initializr_link<br>
@@ -22,7 +23,7 @@ https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.1.9
 ./mvnw spring-boot:run<br>
 
 url:<br>
-http://localhost:8080/badminton/<br>
+https://localhost:8443/badminton/<br>
 
 
 eclipse自動建立entity<br>
@@ -37,7 +38,7 @@ Spring boot Https<br>
 https://my.oschina.net/wangnian/blog/761652<br>
 
 
-Linux部署Spring boot：<br>
+Linux部署Spring boot：(筆記整理)<br>
 https://hackmd.io/@k0kfBUuESY6uU14XsQvp_A/rJFoRyRRH/%2FEoietx6ITiywKXbu3idIaw<br>
 
 上線網址：<br>

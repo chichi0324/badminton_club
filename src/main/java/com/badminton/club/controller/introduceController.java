@@ -1,12 +1,12 @@
 package com.badminton.club.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.badminton.club.dto.BreadDTO;
 import com.badminton.club.entity.System;
 import com.badminton.club.service.BasicService;
 
@@ -16,7 +16,7 @@ import com.badminton.club.service.BasicService;
 @Controller
 @RequestMapping("/introduce")
 public class introduceController extends BaseController{
-	
+		
 	@Autowired
 	private BasicService basicService;
 
@@ -27,6 +27,17 @@ public class introduceController extends BaseController{
 	public String aboutUs(Model theModel) {
 		try {
 			System theSystem = this.basicService.getIntroduceSystem("關於我們");
+			if(StringUtils.isBlank(theSystem.getSysData())){
+				theSystem.setSysData(null);
+			}else{
+				if(theSystem.getSysData().indexOf("&")==-1){
+					theSystem.setSysData(theSystem.getSysData().substring(theSystem.getSysData().indexOf("?v=")+3));
+				}else{
+					theSystem.setSysData(theSystem.getSysData().substring(theSystem.getSysData().indexOf("?v=")+3, theSystem.getSysData().indexOf("&")));
+				}
+			}
+			
+			
 			theModel.addAttribute("theSystem", theSystem);
 
 			this.breadcrumbAndNavbar(theModel, "introduce", "社團介紹", "關於我們");

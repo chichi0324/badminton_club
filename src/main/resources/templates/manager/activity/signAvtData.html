@@ -94,46 +94,46 @@
             <th style="white-space: nowrap;padding-right:3.5em" th:each="oth: ${queryDTO.activity.otherData}" th:text="${oth.othName}" ></th>            
             <th style="white-space: nowrap;">會員帳號</th>
             <th style="white-space: nowrap;">人數</th>
-            <th style="white-space: nowrap;padding-right:6em" th:if="${isEditSignAvt==true}">功能</th>
+            <th style="white-space: nowrap;padding-right:7em" th:if="${isEditSignAvt==true}">功能</th>
           </tr>
           <tr th:each="signDTO: ${queryDTO.signAvtDTOs}">
             <td data-th="報名時間">
-				<p th:text="${#strings.substring(signDTO.signupAvt.signTime,0,10)}"></p>
-				<p th:text="${#strings.substring(signDTO.signupAvt.signTime,11,19)}" class="theTime"></p>
+				<span th:text="${#strings.substring(signDTO.signupAvt.signTime,0,10)}"></span>
+				<span th:text="${#strings.substring(signDTO.signupAvt.signTime,11,19)}" class="theTime"></span>
             </td>          
             <td data-th="會員親友" th:if="${queryDTO.activity.avtFrdData==1}">
-                <p th:text="${signDTO.signupAvt.member.memName}"></p>
+                <span th:text="${signDTO.signupAvt.member.memName}"></span>
             </td>
             <td data-th="姓名">
-                <p th:text="${signDTO.signupAvt.signName}"></p>
+                <span th:text="${signDTO.signupAvt.signName}"></span>
             </td>
             <td data-th="性別">
-                <p th:if="${signDTO.signupAvt.signGen=='M'}">男</p>
-                <p th:if="${signDTO.signupAvt.signGen=='W'}">女</p>
+                <span th:if="${signDTO.signupAvt.signGen=='M'}">男</span>
+                <span th:if="${signDTO.signupAvt.signGen=='W'}">女</span>
             </td>
             <td data-th="生日">
-                <p th:text="${signDTO.signupAvt.signBirth}"></p>
+                <span th:text="${signDTO.signupAvt.signBirth}"></span>
             </td>
             <td data-th="身分證">
-                <p th:text="${signDTO.signupAvt.signIdn}"></p>
+                <span th:text="${signDTO.signupAvt.signIdn}"></span>
             </td>
             <td data-th="手機號碼">
-                <p th:text="${signDTO.signupAvt.signPhone}"></p>
+                <span th:text="${signDTO.signupAvt.signPhone}"></span>
             </td>
             <td data-th="Email">
-                <p th:text="${signDTO.signupAvt.signMail}"></p>
+                <span th:text="${signDTO.signupAvt.signMail}"></span>
             </td>
             <td data-th="地址">
-                <p th:text="${signDTO.signupAvt.signAddr}"></p>
+                <span th:text="${signDTO.signupAvt.signAddr}"></span>
             </td>
             <td th:attr="data-th=${oda.otherData.othName}" th:each="oda: ${signDTO.signupAvt.otherDataAns}">
-                <p th:text="${oda.otheaCon}"></p>
+                <span th:text="${oda.otheaCon}"></span>
             </td>
             <td data-th="會員帳號">
-                <p th:text="${signDTO.signupAvt.signUser}"></p>
+                <span th:text="${signDTO.signupAvt.signUser}"></span>
             </td>
             <td data-th="人數">
-                <p th:text="${signDTO.signupAvt.signCount}" th:if="${signDTO.signupAvt.signCount > 0}"></p>
+                <span th:text="${signDTO.signupAvt.signCount}" th:if="${signDTO.signupAvt.signCount > 0}"></span>
             </td>
             <td data-th="功能" th:if="${isEditSignAvt==true}">
                 <form method="post" th:action="@{/manager/activityManagement/search/detail/signAvtData/modify}" style="display:inline;">

@@ -45,6 +45,14 @@
 						<pre th:text="${theSystem.sysCon}" class="intr_content"></pre>
 					</div>
 				</div>
+				<div class="col-md-12 col-sm-12" th:if="${theSystem.sysData != null}">
+					<div class="function">
+						<h2>youtube影片:</h2>
+                        <iframe id="youtube" th:src="${'https://www.youtube.com/embed/'+theSystem.sysData}" 
+                        frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen></iframe>					
+                    </div>
+				</div>
 			</div>
 
 
