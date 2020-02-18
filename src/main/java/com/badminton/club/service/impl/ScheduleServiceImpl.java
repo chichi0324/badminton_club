@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +61,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		activityQuerys.forEach(activity -> {
 			String nowDate = DateTool.dateToString(new Date());
 			String activityCutDate = DateTool.dateToString(activity.getAvtCutDate());
-			String activityDate = DateTool.dateToString(activity.getAvtDateS());
+			String activityDate = DateTool.dateToString(activity.getAvtDateE());
 
 			log.info("活動名稱:{},系統日期:{}, 活動截止:{}, 活動時間:{}", activity.getAvtName(),nowDate,activityCutDate,activityDate);
 

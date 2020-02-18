@@ -210,10 +210,10 @@ public class BasicServiceImpl implements BasicService {
 			}else if(activity.getAvtUpp() > sum && nowDate.before(activity.getAvtCutDate()) && nowDate.before(activity.getAvtDateS())){
 				activity.setAvtStat("報名中");
 			
-			}else if(nowDate.after(activity.getAvtCutDate()) && nowDate.before(activity.getAvtDateS())){
+			}else if(nowDate.after(activity.getAvtCutDate()) && nowDate.before(activity.getAvtDateE())){
 				activity.setAvtStat("已截止");
 			
-			}else if(nowDate.after(activity.getAvtDateS())){
+			}else if(nowDate.after(activity.getAvtDateE())){
 				activity.setAvtStat("已結束");
 			}
 			activityRepository.save(activity);
