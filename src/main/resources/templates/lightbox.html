@@ -48,7 +48,14 @@
 							<div class="top-left">
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
 									class="link_activity">
-									<label th:text="${activities_show[0].avtName}"></label><br>
+									<!-- 活動名稱小於16字 -->
+									<label th:text="${activities_show[0].avtName}" th:if="${#strings.length(activities_show[0].avtName)} <= 16"></label><br th:if="${#strings.length(activities_show[0].avtName)} <= 16">
+									<!-- 活動名稱大於16字 -->
+									<label th:text="${#strings.substring(activities_show[0].avtName,0,16)}" th:if="${#strings.length(activities_show[0].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[0].avtName)} > 16">
+									<label th:text="${#strings.substring(activities_show[0].avtName,17,#strings.length(activities_show[0].avtName))}" th:if="${#strings.length(activities_show[0].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[0].avtName)} > 16">
+									
 									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[0].avtLoc}"></label><br>
 								</a>
@@ -61,7 +68,14 @@
 							<div class="top-left">
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[0].avtNo})}"
 									class="link_activity">
-									<label th:text="${activities_show[0].avtName}"></label><br>
+									<!-- 活動名稱小於16字 -->
+									<label th:text="${activities_show[0].avtName}" th:if="${#strings.length(activities_show[0].avtName)} <= 16"></label><br th:if="${#strings.length(activities_show[0].avtName)} <= 16">
+									<!-- 活動名稱大於16字 -->
+									<label th:text="${#strings.substring(activities_show[0].avtName,0,16)}" th:if="${#strings.length(activities_show[0].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[0].avtName)} > 16">
+									<label th:text="${#strings.substring(activities_show[0].avtName,17,#strings.length(activities_show[0].avtName))}" th:if="${#strings.length(activities_show[0].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[0].avtName)} > 16">
+									
 									<label th:text="${#strings.substring(activities_show[0].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[0].avtLoc}"></label><br>
 								</a>
@@ -74,7 +88,14 @@
 							<div class="top-left"></div>
 							<div class="top-right">
 								<a th:href="@{/activity/search/detail(activityId=${activities_show[1].avtNo})}" class="link_activity">
-									<label th:text="${activities_show[1].avtName}"></label><br>
+									<!-- 活動名稱小於16字 -->
+									<label th:text="${activities_show[1].avtName}" th:if="${#strings.length(activities_show[1].avtName)} <= 16"></label><br th:if="${#strings.length(activities_show[1].avtName)} <= 16">
+									<!-- 活動名稱大於16字 -->
+									<label th:text="${#strings.substring(activities_show[1].avtName,0,16)}" th:if="${#strings.length(activities_show[1].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[1].avtName)} > 16">
+									<label th:text="${#strings.substring(activities_show[1].avtName,17,#strings.length(activities_show[1].avtName))}" th:if="${#strings.length(activities_show[1].avtName)} > 16"></label>
+									<br th:if="${#strings.length(activities_show[1].avtName)} > 16">
+									
 									<label th:text="${#strings.substring(activities_show[1].avtGatDate,0,16)}"></label><br>
 									<label th:text="${activities_show[1].avtLoc}"></label><br>
 								</a>
