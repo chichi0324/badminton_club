@@ -70,9 +70,9 @@
                     <input type="hidden" th:field="*{joinNumber}" />
                 </div>
                 <div th:if="not${applyDTO.activity.avtOnly}">
-                    <font color='red'>*</font>參與人數(含自己)?
+                    <font color='red'>*</font>人數(含自己)?
                     <button type="button" id="add" style="border-radius:10px;">+</button>
-                    <input type="number" name="joinNumber" id="joinNumber" min="1" style="width: 5%" th:field="*{joinNumber}" readonly/>人
+                    <input type="number" name="joinNumber" id="joinNumber" min="1" style="width: 10%" th:field="*{joinNumber}" readonly/>人
                     <button type="button" id="less" style="border-radius:10px;">-</button>
                 </div>
               </div>
