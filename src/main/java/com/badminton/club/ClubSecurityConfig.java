@@ -1,7 +1,5 @@
 package com.badminton.club;
 
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -19,15 +17,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 @EnableWebSecurity
 public class ClubSecurityConfig extends WebSecurityConfigurerAdapter {
 
+//	@Autowired
+//	DataSource dataSource;
+	
 	@Autowired
-	DataSource dataSource;
+    UserDetailsService clubUserDetailsService;
 
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
 		
-		auth.jdbcAuthentication().dataSource(dataSource);
+//		auth.jdbcAuthentication().dataSource(dataSource);
+		
+		auth.userDetailsService(clubUserDetailsService);
 		
 
 //		auth //Builder Design Pattern
